@@ -2,6 +2,19 @@ var verifyEmail = false;
 
 Accounts.config({ sendVerificationEmail: verifyEmail });
 
+
+function initialDataLoad (collectionName, collection) {
+	if (collection.find().count() === 0) {
+			console.log("Importing "+ collectionName + " to db");
+
+			var data = JSON.parse(Assets.getText("flows/" + collectionName + ".json"));
+
+			data.forEach(function (item, index, array) {
+					collection.insert(item);
+			})
+	}
+}
+
 Meteor.startup(function() {
 	// read environment variables from Meteor.settings
 	if(Meteor.settings && Meteor.settings.env && _.isObject(Meteor.settings.env)) {
@@ -9,6 +22,11 @@ Meteor.startup(function() {
 			process.env[variableName] = Meteor.settings.env[variableName];
 		}
 	}
+
+	// import data only when collection is empty
+	initialDataLoad("tasks", this.Tasks);
+	initialDataLoad("entities", this.Entities);
+	initialDataLoad("flows", this.Flows);
 
 	//
 	// Setup OAuth login service configuration (read from Meteor.settings)
@@ -109,7 +127,7 @@ Meteor.startup(function() {
 		}
 	}
 
-	
+
 });
 
 Meteor.methods({
@@ -185,7 +203,7 @@ Accounts.onCreateUser(function (options, user) {
 		user.profile = options.profile;
 	}
 
-	
+
 	return user;
 });
 
@@ -277,7 +295,7 @@ Users.before.update(function(userId, doc, fieldNames, modifier, options) {
 });
 
 Accounts.onLogin(function (info) {
-	
+
 });
 
 Accounts.urls.resetPassword = function (token) {

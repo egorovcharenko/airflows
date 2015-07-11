@@ -59,7 +59,7 @@ template(name="PublicLayoutLeftMenu")
     li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
       a(href="{{pathFor 'home_public'}}")
         | Home
-
+        
 template(name="PublicLayoutRightMenu")
   ul(id="menu-items" class="nav navbar-nav navbar-right")
     li(id="menu-item-simple" class="{{menuItemClass 'register'}}")
@@ -94,12 +94,16 @@ template(name="PrivateLayout")
 
 template(name="PrivateLayoutLeftMenu")
   ul(id="menu-items" class="nav navbar-nav")
-    li(id="menu-item-simple" class="{{menuItemClass 'home_private'}}")
-      a(href="{{pathFor 'home_private'}}")
-        | Home
+    li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
+      a(href="{{pathFor 'tasks'}}")
+        | Задачи
+    li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
+      a(href="{{pathFor 'execute'}}")
+        | Запустить
     li(id="menu-item-simple" class="{{menuItemClass 'flows_list_page'}}")
-      a(href="{{pathFor 'flows_list_page'}}")
+      a(href="{{pathFor 'flows'}}")
         | Процессы
+
 
 template(name="PrivateLayoutRightMenu")
   ul(id="menu-items" class="nav navbar-nav navbar-right")
