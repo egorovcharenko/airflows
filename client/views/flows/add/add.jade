@@ -1,0 +1,25 @@
+
+
+template(name="FlowsAdd")
+  div(class="page-container container" id="content")
+    div(class="row" id="title_row")
+      div(class="col-md-12")
+        div(id="page_menu" class="pull-right")
+    +FlowsAddFlowsAddForm
+
+template(name="FlowsAddFlowsAddForm")
+  div(class="")
+    form(id="form" role="form")
+      +if errorMessage
+        div(class="alert alert-warning")
+          | {{errorMessage}}
+      +if infoMessage
+        div(class="alert alert-success")
+          | {{infoMessage}}
+      div(class="form-group")
+        div(class="submit-div")
+          button(id="form-submit-button" class="btn btn-success" type="submit")
+            span(class="fa fa-check")
+            | Save
+          a(href="#" id="form-cancel-button" class="btn btn-default")
+            | Cancel

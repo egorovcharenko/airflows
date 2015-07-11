@@ -1,0 +1,116 @@
+
+head
+  meta(name="viewport" content="width=device-width, initial-scale=1")
+  title
+    | Airflows
+
+template(name="layout")
+  +if currentUser
+    +PrivateLayout
+  else
+    +PublicLayout
+
+template(name="FreeLayout")
+  div(id="wrap")
+    div(class="navbar navbar-fixed-top navbar-default" role="navigation")
+      div(class="navbar-container container")
+        div(class="navbar-header")
+          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
+            span(class="sr-only")
+              | Toggle navigation
+            span(class="icon-bar")
+            span(class="icon-bar")
+            span(class="icon-bar")
+          a(class="navbar-brand" href="#")
+            | Airflows
+        div(id="menu" class="collapse navbar-collapse")
+    div(class="navbar-spacer")
+    +yield
+  div(id="footer")
+    div(class="footer-container container")
+      p(class="text-muted")
+        | (c) 2015 - Airflows
+
+template(name="PublicLayout")
+  div(id="wrap")
+    div(class="navbar navbar-inverse navbar-fixed-top" role="navigation")
+      div(class="navbar-container container")
+        div(class="navbar-header")
+          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
+            span(class="sr-only")
+              | Toggle navigation
+            span(class="icon-bar")
+            span(class="icon-bar")
+            span(class="icon-bar")
+          a(class="navbar-brand" href="#")
+            | Airflows
+        div(id="menu" class="collapse navbar-collapse")
+          +PublicLayoutLeftMenu
+          +PublicLayoutRightMenu
+    div(class="navbar-spacer")
+    +yield
+  div(id="footer")
+    div(class="footer-container container")
+      p(class="text-muted")
+        | (c) 2015 - Airflows
+
+template(name="PublicLayoutLeftMenu")
+  ul(id="menu-items" class="nav navbar-nav")
+    li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
+      a(href="{{pathFor 'home_public'}}")
+        | Home
+
+template(name="PublicLayoutRightMenu")
+  ul(id="menu-items" class="nav navbar-nav navbar-right")
+    li(id="menu-item-simple" class="{{menuItemClass 'register'}}")
+      a(href="{{pathFor 'register'}}")
+        | Register
+    li(id="menu-item-simple" class="{{menuItemClass 'login'}}")
+      a(href="{{pathFor 'login'}}")
+        | Login
+
+template(name="PrivateLayout")
+  div(id="wrap")
+    div(class="navbar navbar-default navbar-fixed-top" role="navigation")
+      div(class="navbar-container container")
+        div(class="navbar-header")
+          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
+            span(class="sr-only")
+              | Toggle navigation
+            span(class="icon-bar")
+            span(class="icon-bar")
+            span(class="icon-bar")
+          a(class="navbar-brand" href="#")
+            | Airflows
+        div(id="menu" class="collapse navbar-collapse")
+          +PrivateLayoutLeftMenu
+          +PrivateLayoutRightMenu
+    div(class="navbar-spacer")
+    +yield
+  div(id="footer")
+    div(class="footer-container container")
+      p(class="text-muted")
+        | (c) 2015 - Airflows
+
+template(name="PrivateLayoutLeftMenu")
+  ul(id="menu-items" class="nav navbar-nav")
+    li(id="menu-item-simple" class="{{menuItemClass 'home_private'}}")
+      a(href="{{pathFor 'home_private'}}")
+        | Home
+    li(id="menu-item-simple" class="{{menuItemClass 'flows_list_page'}}")
+      a(href="{{pathFor 'flows_list_page'}}")
+        | Процессы
+
+template(name="PrivateLayoutRightMenu")
+  ul(id="menu-items" class="nav navbar-nav navbar-right")
+    li(id="menu-item-dropdown" class="dropdown ")
+      a(href="#" class="dropdown-toggle" data-toggle="dropdown")
+        | {{userEmail}}
+        b(class="caret")
+      ul(id="menu-items" class="dropdown-menu")
+        li(class="{{menuItemClass 'user_settings'}}")
+          a(href="{{pathFor 'user_settings'}}")
+            | Settings
+        li(class="{{menuItemClass 'logout'}}")
+          a(href="{{pathFor 'logout'}}")
+            | Logout
