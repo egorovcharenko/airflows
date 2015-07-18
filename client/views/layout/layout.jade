@@ -103,7 +103,9 @@ template(name="PrivateLayoutLeftMenu")
     li(id="menu-item-simple" class="{{menuItemClass 'flows_list_page'}}")
       a(href="{{pathFor 'flows'}}")
         | Процессы
-
+    li(id="menu-item-simple" class="{{menuItemClass 'flows_list_page'}}")
+      a(href="{{pathFor 'entitiesList'}}")
+        | Сущности
 
 template(name="PrivateLayoutRightMenu")
   ul(id="menu-items" class="nav navbar-nav navbar-right")

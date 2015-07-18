@@ -19,8 +19,9 @@ copleykj:livestamp
 reactive-dict
 accounts-password
 mrt:moment
-rajit:bootstrap3-datepicker
-mizzao:bootboxjs
 coffeescript
 mquandalle:jade
 reywood:publish-composite
+monbro:mongodb-mapreduce-aggregation
+materialize:materialize
+jsplumb:jsplumb
