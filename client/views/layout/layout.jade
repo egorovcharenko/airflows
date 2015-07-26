@@ -10,113 +10,86 @@ template(name="layout")
   else
     +PublicLayout
 
-template(name="FreeLayout")
-  div(id="wrap")
-    div(class="navbar navbar-fixed-top navbar-default" role="navigation")
-      div(class="navbar-container container")
-        div(class="navbar-header")
-          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
-            span(class="sr-only")
-              | Toggle navigation
-            span(class="icon-bar")
-            span(class="icon-bar")
-            span(class="icon-bar")
-          a(class="navbar-brand" href="#")
-            | Airflows
-        div(id="menu" class="collapse navbar-collapse")
-    div(class="navbar-spacer")
-    +yield
-  div(id="footer")
-    div(class="footer-container container")
-      p(class="text-muted")
-        | (c) 2015 - Airflows
-
 template(name="PublicLayout")
-  div(id="wrap")
-    div(class="navbar navbar-inverse navbar-fixed-top" role="navigation")
-      div(class="navbar-container container")
-        div(class="navbar-header")
-          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
-            span(class="sr-only")
-              | Toggle navigation
-            span(class="icon-bar")
-            span(class="icon-bar")
-            span(class="icon-bar")
-          a(class="navbar-brand" href="#")
-            | Airflows
-        div(id="menu" class="collapse navbar-collapse")
-          +PublicLayoutLeftMenu
-          +PublicLayoutRightMenu
-    div(class="navbar-spacer")
+  header(id="wrap")
+    nav
+      .nav-wrapper.container
+        a.brand-logo(href="#!") Airflows
+        a.button-collapse(href="#" data-activates="mobile-demo")
+          i.material-icons Меню
+        ul.right.hide-on-med-and-down
+          li
+            a(href="{{pathFor 'home_public'}}") Home
+          li
+            a(href="{{pathFor 'register'}}") Register
+          li
+            a(href="{{pathFor 'login'}}") Login
+          ul#mobile-demo.side-nav
+            li
+              a(href="{{pathFor 'home_public'}}") Home
+            li
+              a(href="{{pathFor 'register'}}") Register
+            li
+              a(href="{{pathFor 'login'}}") Login
+  main
     +yield
-  div(id="footer")
-    div(class="footer-container container")
-      p(class="text-muted")
-        | (c) 2015 - Airflows
-
-template(name="PublicLayoutLeftMenu")
-  ul(id="menu-items" class="nav navbar-nav")
-    li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
-      a(href="{{pathFor 'home_public'}}")
-        | Home
-        
-template(name="PublicLayoutRightMenu")
-  ul(id="menu-items" class="nav navbar-nav navbar-right")
-    li(id="menu-item-simple" class="{{menuItemClass 'register'}}")
-      a(href="{{pathFor 'register'}}")
-        | Register
-    li(id="menu-item-simple" class="{{menuItemClass 'login'}}")
-      a(href="{{pathFor 'login'}}")
-        | Login
+  footer.page-footer
+    .container
+      .row
+        .col.l6.s12
+          h5.white-text Footer Content
+          p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content
+        .col.l4.offset-l2.s12
+          h5.white-text Links
+    .footer-copyright
+      .container
+        © 2014 Copyright Text
+        a.grey-text.text-lighten-4.right(href="#!") More Links
 
 template(name="PrivateLayout")
-  div(id="wrap")
-    div(class="navbar navbar-default navbar-fixed-top" role="navigation")
-      div(class="navbar-container container")
-        div(class="navbar-header")
-          button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
-            span(class="sr-only")
-              | Toggle navigation
-            span(class="icon-bar")
-            span(class="icon-bar")
-            span(class="icon-bar")
-          a(class="navbar-brand" href="#")
-            | Airflows
-        div(id="menu" class="collapse navbar-collapse")
-          +PrivateLayoutLeftMenu
-          +PrivateLayoutRightMenu
-    div(class="navbar-spacer")
+  header(id="wrap")
+    nav
+      .nav-wrapper.container
+        a.brand-logo(href="#!") Airflows
+        a.button-collapse(href="#" data-activates="mobile-demo")
+          i.material-icons Меню
+        ul.right.hide-on-med-and-down
+          li
+            a(href="{{pathFor 'tasks'}}") Задачи
+          li
+            a(href="{{pathFor 'execute'}}") Запустить
+          li
+            a(href="{{pathFor 'flows'}}") Процессы
+          li
+            a(href="{{pathFor 'entitiesList'}}") Сущности
+          li
+            a(href="{{pathFor 'user_settings'}}") Settings
+          li
+            a(href="{{pathFor 'logout'}}") Logout
+          ul#mobile-demo.side-nav
+            li
+              a(href="{{pathFor 'tasks'}}") Задачи
+            li
+              a(href="{{pathFor 'execute'}}") Запустить
+            li
+              a(href="{{pathFor 'flows'}}") Процессы
+            li
+              a(href="{{pathFor 'entitiesList'}}") Сущности
+            li
+              a(href="{{pathFor 'user_settings'}}") Settings
+            li
+              a(href="{{pathFor 'logout'}}") Logout
+  main
     +yield
-  div(id="footer")
-    div(class="footer-container container")
-      p(class="text-muted")
-        | (c) 2015 - Airflows
-
-template(name="PrivateLayoutLeftMenu")
-  ul(id="menu-items" class="nav navbar-nav")
-    li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
-      a(href="{{pathFor 'tasks'}}")
-        | Задачи
-    li(id="menu-item-simple" class="{{menuItemClass 'home_public'}}")
-      a(href="{{pathFor 'execute'}}")
-        | Запустить
-    li(id="menu-item-simple" class="{{menuItemClass 'flows_list_page'}}")
-      a(href="{{pathFor 'flows'}}")
-        | Процессы
-    li(id="menu-item-simple" class="{{menuItemClass 'flows_list_page'}}")
-      a(href="{{pathFor 'entitiesList'}}")
-        | Сущности
-
-template(name="PrivateLayoutRightMenu")
-  ul(id="menu-items" class="nav navbar-nav navbar-right")
-    li(id="menu-item-dropdown" class="dropdown ")
-      a(href="#" class="dropdown-toggle" data-toggle="dropdown")
-        | {{userEmail}}
-        b(class="caret")
-      ul(id="menu-items" class="dropdown-menu")
-        li(class="{{menuItemClass 'user_settings'}}")
-          a(href="{{pathFor 'user_settings'}}")
-            | Settings
-        li(class="{{menuItemClass 'logout'}}")
-          a(href="{{pathFor 'logout'}}")
-            | Logout
+  footer.page-footer
+    .container
+      .row
+        .col.l6.s12
+          h5.white-text Footer Content
+          p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content
+        .col.l4.offset-l2.s12
+          h5.white-text Links
+    .footer-copyright
+      .container
+        © 2014 Copyright Text
+        a.grey-text.text-lighten-4.right(href="#!") More Links

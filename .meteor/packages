@@ -25,3 +25,5 @@ reywood:publish-composite
 monbro:mongodb-mapreduce-aggregation
 materialize:materialize
 jsplumb:jsplumb
+jquery
+jaywon:meteor-node-uuid
