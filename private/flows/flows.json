@@ -1,0 +1,12 @@
+[
+  {
+    "name": "incomingCall",
+    "prettyName": "Входящий звонок",
+    "entityName": "incomingCall"
+  },
+  {
+    "name": "takeOrderByPhone",
+    "prettyName": "Оформление заказа",
+    "entityName": "order"
+  }
+]

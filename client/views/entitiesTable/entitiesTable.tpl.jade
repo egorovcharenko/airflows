@@ -1,0 +1,25 @@
+#content.page-container.container
+  #title_row.row
+    .col-md-12
+      #page_menu.pull-right
+  .row
+    +entitiesButtons
+  .row
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th Создано
+          th Обновлено
+          th Автор
+          th Статус
+          each getFields
+            th #{prettyName}
+      tbody
+        each this.entIns
+          tr
+            td {{prettifyDate createdAt}}
+            td {{prettifyDate modifiedAt}}
+            td #{getUser.profile.name}
+            td #{state}
+            each getFieldValues
+              td #{value}

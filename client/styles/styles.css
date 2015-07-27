@@ -1,0 +1,126 @@
+#back-button, #cancel-button {
+  float:right;
+}
+
+.task-td, .empty {
+  width: 230px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.task-panel {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 0px;
+}
+.add-task-before-row {
+  margin-bottom: 0px;
+}
+.col.right-tight {
+  padding-right: 0px;
+  margin-right: -10px;
+}
+.tight {
+  padding-left: 0px;
+  padding: 2px;
+}
+
+.start, .end {
+  margin: 5px
+}
+
+.top-aligned {
+  vertical-align: top;
+}
+
+.btn-connect {
+  margin: 2px;
+  z-index: 5;
+}
+.connection-dot {
+  width: 1px;
+  height: 1px;
+  font-size: 1px;
+  line-height: 1px;
+  padding-left:10px;
+  padding-right: 10px;
+}
+
+.connections-row {
+  height: 17px;
+}
+
+.row.connections {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 0px;
+}
+
+.connectionRemoveButton {
+}
+
+.connectionIcon {
+}
+
+.row.header {
+  margin-bottom: 0px;
+}
+
+.row.content-row {
+  margin-bottom: 0px;
+}
+.row.content-row p {
+  margin: 0px;
+  font-size: 11px;
+}
+
+.decision-text {
+  font-size: 10px;
+  margin: 2px;
+  padding: 5px;
+}
+.decision-row {
+  margin: 0px;
+}
+.decisions-container {
+  margin-bottom: 10px;
+  margin-right: 0px;
+}
+.decisions-container-edit {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.btn.add-decision {
+  font-size: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.row.input-new-decision {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.row.decision-row:first-of-type {
+  margin-top: -15px;
+}
+
+._jsPlumb_endpoint {
+  z-index: 1;
+}
+
+._jsPlumb_connector, ._jsPlumb_overlay {
+  z-index: -100;
+}
+
+.end-card {
+  text-align: center;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}

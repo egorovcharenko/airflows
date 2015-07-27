@@ -1,0 +1,42 @@
+.panel.panel-default
+  .panel-heading 
+    .row
+      .col-md-8
+        h4.panel-title #{name}
+      .col-md-4
+        a#cancel-button(class="btn btn-danger btn-xs") Отменить процесс
+        p #{logDataContext}
+  .panel-body
+    each subTasks
+      if showTask
+        div(class="panel {{#if isPreend}}panel-success{{else}}{{#if isTaskNotCurrent}}{{#if isTaskCompleted}}panel-default{{else}}panel-default{{/if}}{{else}}panel-warning{{/if}}{{/if}}")
+          .panel-heading 
+            .row
+              .col-md-8
+                h5.panel-title #{name}
+              .col-md-4
+                a#back-button(class="btn btn-default btn-xs {{#if isTaskIsFirst}}disabled{{/if}}") На шаг назад
+          .panel-body
+            .list-group
+              p.list-group-item-text #{instructions}
+            if taskTypeIsTask
+              .row
+                .col-md-12.text-center
+                  a#task-completed(class="btn {{#if isTaskNotCurrent}}btn-default disabled{{else}}btn-primary{{/if}}") Выполнено
+            else if taskTypeIsDecision
+              .row
+                .col-md-12.text-center
+                  .btn-group.btn-group-vertical
+                    if isTaskNotCurrent
+                      each decisions
+                        a#decision-button(class="btn btn-default disabled", href="#", data-flowinsid="#{../flowInsId}", data-taskid="#{../_id}") #{name} 
+                    else
+                      each decisions
+                        a#decision-button(class="btn btn-primary", href="#", data-flowinsid="#{../flowInsId}", data-taskid="#{../_id}") #{name} 
+            else if isEmbeddedFlow
+              with getEmbeddedFlow
+                +singleFlowIns
+            else if isPreend
+              .row
+                .col-md-12.text-center
+                  a#task-completed(class="btn btn-success") Завершить процесс

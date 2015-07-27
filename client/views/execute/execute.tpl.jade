@@ -1,0 +1,18 @@
+#content.page-container.container
+  #title_row.row
+    .col-md-12
+      #page_menu.pull-right
+  .row
+    each this
+      .col-md-3
+        .panel.panel-default
+          .panel-heading 
+            .row
+              .col-md-7
+                h4.panel-title #{prettyName}
+              .col-md-5
+                a#edit-flow-button(class="btn btn-default btn-xs") Изменить
+          .panel-body
+            .row
+              .col-md-12.text-center
+                a#run-flow.btn.btn-primary Запустить

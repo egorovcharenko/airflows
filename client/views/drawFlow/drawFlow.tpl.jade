@@ -1,0 +1,98 @@
+#content.page-container
+  #title_row.row
+    .col-md-12
+      #page_menu.pull-right
+  .row#links-container
+    table
+      tbody
+        each this.rows
+          tr
+            each this
+              if notEmpty
+                if isEnd
+                  td.top-aligned(colspan="{{maxColspan}}")
+                    .row.end
+                      .col.s12
+                        .card.end-card(id="{{task._id}}").orange.darken-3
+                          h5.flow-text.white-text Конец
+                else
+                  td.top-aligned.task-td
+                    if task.editMode
+                      .row.add-task-before-row
+                        .col.s12.center-align
+                          a.btn-floating.waves-effect.waves-light.red(id="add-task-before")
+                            i.medium.mdi-action-note-add
+                    div(class="card task-panel {{#if isStart}}orange darken-3{{/if}}", id="{{task._id}}")
+                      if task.editMode
+                        .input-field.col.s12
+                          input.validate(id="last_name" type="text" value="{{task.name}}")
+                          label.active(for="last_name") Название
+                        .input-field.col.s12
+                          textarea.materialize-textarea(id="textarea_instructions")
+                            | {{task.instructions}}
+                          label.active(for="instructions") Инструкции
+                      else
+                        if isStart
+                          h5.flow-text.white-text Начало
+                        else
+                          .row.header
+                            .col.s6
+                              h6.left #{task.name}
+                            .col.s6
+                              a#start_editing_task.waves-effect.waves-light.right
+                                i.tiny.mdi-editor-mode-edit
+                              a#delete_task.waves-effect.waves-light.right
+                                i.tiny.mdi-action-delete
+                          .row.content-row
+                            .col.s12
+                              p #{task.instructions}
+                      if hasDecisions
+                        if task.editMode
+                          .decisions-container-edit
+                            each task.decisions
+                              .row.decision-row
+                                .tight.col.s8.center-align
+                                  .card-panel.teal.decision-text(id="{{id}}")
+                                    span.white-text #{name}
+                                .tight.col.s2.center-align
+                                  a#remove-decision.btn-floating.waves-effect.waves-light.btn-connect.connectionRemoveButton
+                                    i.tiny.mdi-action-highlight-remove(data-decision-id="{{id}}", data-task-id="{{../task._id}}")
+                                .tight.col.s2.center-align
+                                  a(id="decision-{{id}}")
+                                    a.btn-floating.waves-effect.waves-light.btn-connect.connectionRemoveButton(id = "new_connection_for_task_{{../task._id}}_with_decision_{{id}}")
+                                      i.tiny.mdi-content-redo(data-source="{{sourceId}}", data-destination="{{destinationId}}")
+                            .row.input-new-decision.center-align
+                              .col.s8
+                                input-field
+                                  input#newDecisionName(type="text" class="validate")
+                              .col.s2
+                                a#add-decision.waves-effect.waves-light.btn.add-decision
+                                  i.medium.mdi-content-add
+                        else
+                          .decisions-container
+                            each task.decisions
+                              .row.decision-row
+                                .col.s12.right-tight
+                                  .card-panel.teal.decision-text(id="decision-{{id}}")
+                                    span.white-text #{name}
+                      else
+                        if task.editMode
+                          .row.connectionsActive
+                            .col.s6.offset-s3.center-align
+                              each taskConnections
+                                a(id="connection-from-{{sourceId}}-to-{{destinationId}}")
+                                  a#remove-connection.btn-floating.waves-effect.waves-light.red.btn-connect.connectionRemoveButton
+                                    i.tiny.mdi-action-highlight-remove(data-source="{{sourceId}}", data-destination="{{destinationId}}")
+                            a.btn-floating.btn-connect.waves-effect.waves-light.red(id="new-connection-from-{{task._id}}")
+                              i.medium.mdi-content-add
+                        else
+                          .row.connections
+                            .col.s6.offset-s3.center-align.connections-row
+                              each taskConnections
+                                span.connection-dot(id="connection-from-{{sourceId}}-to-{{destinationId}}") &middot;
+                      if task.editMode
+                        .row
+                          .col.s12.center-align
+                            a#save-edited-task.waves-effect.waves-light.btn Сохранить
+              else
+                td.empty

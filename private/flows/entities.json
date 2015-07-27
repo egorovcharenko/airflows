@@ -1,0 +1,17 @@
+[
+  {
+    "name": "incomingCall",
+    "prettyName": "Входящий звонок",
+    "fieldsToShow": [
+      {
+        "name": "reason",
+        "prettyName": "Причина звонка"
+      }
+    ]
+
+  },
+  {
+    "name": "order",
+    "prettyName": "Заказ"
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "flowName": "incomingCall",
+    "pos": "1",
+    "type": "start",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos":["2"],
+    "stateAfterThisTask": "В работе"
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "2",
+    "type": "task",
+    "name": "Приветствие",
+    "instructions": "Поприветствовать клиента: «(Имя Менеджера), интернет-магазин AllShellac, добрый день»",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["3"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "3",
+    "type": "decision",
+    "name": "В чем заключается обращение?",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "decisions": [
+      {
+        "id": "1",
+        "name": "Клиенту нужна консультация",
+        "nextPos": ["4"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Консультация"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "name": "Клиент хочет оформить заказ",
+        "nextPos": ["5"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Оформление заказа"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "name": "Срочная проблема",
+        "nextPos": ["7"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Срочная проблема"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "name": "Любая другая проблема",
+        "nextPos": ["8"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Любая другая проблема"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "4",
+    "type": "task",
+    "name": "Оказать консультацию",
+    "instructions": "Временное ограничение: Если время консультации превышает 10 минут, вежливо завершить разговор сославшись на то что руководитель срочно зовет к себе. Консультации больше 11 минут недопустим.",
+    "role": "consultant",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "5",
+    "type": "decision",
+    "name": "Предложить на сайте",
+    "instructions": "Вежливо предложить оформить на сайте фразой «Если не сложно, оформите пожалуйста заказ на сайте, так меньше шанс что я что-то не так запишу»",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "decisions": [
+      {
+        "id": "5",
+        "name": "Все равно хочет оформить заказ по телефону",
+        "desc": "описание",
+        "nextPos": ["6"],
+        "stateAfterThisTask": ""
+      },
+      {
+        "id": "6",
+        "name": "Согласен оформить заказ на сайте",
+        "desc": "описание",
+        "nextPos": ["999"],
+        "stateAfterThisTask": ""
+      }
+    ],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "6",
+    "type": "embeddedFlow",
+    "subFlowName": "takeOrderByPhone",
+    "name": "Оформление заказа",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "7",
+    "type": "task",
+    "name": "Решить проблему",
+    "instructions": "Если не приехал курьер: Позвонить в курьерскую службу, выяснить где он, Если курьер приехал а в заказе не то: Проверить все по заказу. По другим проблемам: В зависимости от проблемы",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "8",
+    "type": "decision",
+    "name": "Предложить оставить проблему через сайт",
+    "instructions": "Говорим клиенту, что так быстрее среагируем так как сразу уйдет на нужный отдел, Ссылка - на сайте под телефоном",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "decisions": [
+      {
+        "id": "7",
+        "name": "Клиент все равно хочет оставить жалобу по телефону",
+        "desc": "описание",
+        "nextPos": ["9"],
+        "stateAfterThisTask": ""
+      },
+      {
+        "id": "8",
+        "name": "Клиент согласен сам внести проблему",
+        "desc": "описание",
+        "nextPos": ["999"],
+        "stateAfterThisTask": ""
+      }
+    ],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "9",
+    "type": "task",
+    "name": "Оформление жалобы",
+    "subFlowName": "inputProblemIntoFreshdesk",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "999",
+    "type": "end",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos": [""],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "takeOrderByPhone",
+    "pos": "1",
+    "type": "start",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos": ["2"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "takeOrderByPhone",
+    "pos": "2",
+    "type": "task",
+    "name": "Открыть МС",
+    "instructions": "Поприветствовать клиента",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "takeOrderByPhone",
+    "pos": "999",
+    "type": "end",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos": [""],
+    "stateAfterThisTask": ""
+  }
+]
