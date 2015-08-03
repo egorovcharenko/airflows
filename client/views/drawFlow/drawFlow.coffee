@@ -1,6 +1,7 @@
 Template.drawFlow.events
 	'click #add-task-before': (event, template) ->
     # добавить новую задачу
+		#console.log "this.task:", this.task
 		Meteor.call "addTaskBefore", this.task, (error, result) ->
 			if error
 				console.log "error", error
@@ -8,8 +9,16 @@ Template.drawFlow.events
 				console.log "success"
 	'click #save-edited-task': (event, template) ->
 		task = this.task
-		task.name = template.find("input#last_name").value
-		task.instructions = template.find("#textarea_instructions").value
+		inputName = template.find("input#last_name")
+		if inputName
+			task.name = inputName.value
+		inputInstr = template.find("#textarea_instructions")
+		if inputInstr
+			task.instructions = inputInstr.value
+		temp = template.find("select")
+		#console.log "temp:", temp
+		task.roleId = temp.value
+		console.log "task.roleId:",task.roleId
 		Meteor.call "saveEditedTask", this.task, false, (error, result) ->
 			if error
 				console.log "error", error
@@ -56,6 +65,17 @@ Template.drawFlow.events
 				console.log "success"
 
 Template.drawFlow.helpers
+	allRoles: ->
+		return Roles.find({})
+	isRoleSelected: ->
+		console.log "this.id:", this.id
+		console.log "task.roleId:",Template.parentData().task.roleId
+		this.id == Template.parentData().task.roleId
+	classForSelectedRole: ->
+		if this.id == Template.parentData().task.roleId
+			return "selected_class"
+		else
+			return false
 	notEmpty: ->
 		if this.task?
 			true
@@ -63,6 +83,8 @@ Template.drawFlow.helpers
 			false
 	isStart: ->
 		this.task.type == "start"
+	isNotStart: ->
+		this.task.type != "start"
 	isEnd: ->
 		this.task.type == "end"
 	hasPreData: ->
@@ -71,7 +93,10 @@ Template.drawFlow.helpers
 		this.task.decisions?
 	maxColspan: ->
 		#console.log Router.current().data()
-		Router.current().data().params.maxX + 1
+		if this.task.type == "end"
+			Router.current().data().params.maxX + 1
+		else
+			1
 	taskConnections: ->
 		#console.log "this:", this
 		result = []
@@ -80,12 +105,23 @@ Template.drawFlow.helpers
 				result.push {sourceId: this.task._id, destinationId: Tasks.findOne({pos: nextPos})._id}
 		#console.log "result:", result
 		result
+	hasLeftBorder: ->
+		this.hasLeftBorder
+
+	hasRightBorder: ->
+		this.hasRightBorder
+
+	debugInfo: ->
+		"operator-#{this.task.roleWidth['operator']}<br>
+		role2-#{this.task.roleWidth['role2']}<br>
+		roleId-#{this.task.roleId}"
 
 Template.drawFlow.onRendered ->
 	this.autorun ->
 		data = Router.current().data()
 		Tracker.afterFlush ->
-			console.log "============== dom is now created, redrawing"
+			$('select').material_select();
+			#console.log "============== dom is now created, redrawing"
 			jsPlumb.setContainer($("#links-container"))
 			jsPlumb.detachEveryConnection()
 			jsPlumb.deleteEveryEndpoint()
@@ -138,7 +174,7 @@ connect = (id1, id2, end, fromDecision, stubLevel) ->
 	jsPlumb.connect {
 		source:"#{id1}",
 		target:"#{id2}",
-		endpoint:["Dot", {radius: 3}], connector:[ "Flowchart", {alwaysRespectStubs:true, midpoint:0.99, stub:10 + stubLevel*5, cornerRadius:2 } ],
+		endpoint:["Dot", {radius: 3}], connector:[ "Flowchart", {alwaysRespectStubs:true, midpoint:0.85, stub:10 + stubLevel*5, cornerRadius:2 } ],
 		anchors: anchors,
 		paintStyle:{ strokeStyle:"black", lineWidth:1 }
 	}
@@ -211,8 +247,6 @@ initJsPlumb = (tasks)->
 
 	for task in tasks
 		#console.log "task:", task
-		if task.type == "end"
-			continue
 
 		test = $("##{task._id}").length
 		if not test
@@ -220,6 +254,9 @@ initJsPlumb = (tasks)->
 
 		#console.log "Making target: #{task._id}"
 		instance.makeTarget("#{task._id}", { anchor: [0.6, 1, 0, 1] }, newConnectionEndpoint)
+
+		if task.type == "end"
+			continue
 
 		if task.decisions?
 			for decision in task.decisions

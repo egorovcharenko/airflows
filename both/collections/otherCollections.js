@@ -1,8 +1,10 @@
 this.FlowsIns = new Mongo.Collection("flowsIns");
 this.TasksIns = new Mongo.Collection("tasksIns");
-
-
+this.Roles = new Mongo.Collection("accountRoles");
+this.AccountsColl = new Mongo.Collection("accounts");
+this.Invitations = new Mongo.Collection("invitations");
 this.EntitiesIns = new Mongo.Collection("entitiesIns");
+
 this.EntitiesIns.before.insert(function(userId, doc) {
 	doc.createdAt = new Date();
 	doc.createdBy = userId;

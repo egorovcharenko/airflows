@@ -11,7 +11,8 @@ var publicRoutes = [
 	"login",
 	"register",
 	"forgot_password",
-	"reset_password"
+	"reset_password",
+	"registerInvite"
 ];
 
 var privateRoutes = [
@@ -25,7 +26,8 @@ var privateRoutes = [
 	"execute",
 	"entitiesList",
 	"entitiesTable",
-	"drawFlow"
+	"drawFlow",
+	"accountRoles"
 ];
 
 var freeRoutes = [
@@ -176,10 +178,10 @@ Router.onBeforeAction(Router.ensureLogged, {only: privateRoutes});
 Router.onBeforeAction(Router.ensureGranted, {only: freeRoutes}); // yes, route from free zone can be restricted to specific set of user roles
 
 Router.map(function () {
-
 	this.route("home_public", {path: "/", controller: "HomePublicController"});
 	this.route("login", {path: "/login", controller: "LoginController"});
 	this.route("register", {path: "/register", controller: "RegisterController"});
+	this.route("registerInvite", {path: "/register/invite/:token", controller: "RegisterInviteController"});
 	this.route("forgot_password", {path: "/forgot_password", controller: "ForgotPasswordController"});
 	this.route("reset_password", {path: "/reset_password/:resetPasswordToken", controller: "ResetPasswordController"});
 	this.route("home_private", {path: "/home_private", controller: "HomePrivateController"});
@@ -193,4 +195,5 @@ Router.map(function () {
 	this.route("entitiesList", {path: "/entities/list", controller: "EntitiesListController"});
 	this.route("entitiesTable", {path: "/entities/list/:type", controller: "EntitiesTableController"});
 	this.route("drawFlow", {path: "/flow/:flowId", controller: "DrawFlowController"});
+	this.route("accountRoles", {path: "/roles/list", controller: "RolesController"});
 });

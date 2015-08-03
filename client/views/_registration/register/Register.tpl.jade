@@ -1,0 +1,27 @@
+div.container
+  .row
+    .col.s12.l6.offset-l3
+      form(id="register_form" class="account-form" role="form")
+        h3
+          | Зарегистрируйтесь
+        +if errorMessage
+          div(class="alert alert-warning")
+            | {{errorMessage}}
+        .input-field
+          input.validate(id="register_name" type="text")
+          label(for="register_name") Ваше имя
+        .input-field
+          input(id="register_account_name" type="text")
+          label(for="register_account_name") Название компании или аккаунта (только лат. буквы)
+        .input-field
+          input(id="register_email" type="text")
+          label(for="register_email") Email
+        .input-field
+          input(id="register_password" type="password")
+          label(for="register_password") Пароль
+        button(class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="Пожалуйста подождите...")
+          | Создать аккаунт
+        p(class="account-form-text-after")
+          | Уже есть аккаунт?
+          a(href="{{pathFor 'login'}}")
+            | Войдите здесь

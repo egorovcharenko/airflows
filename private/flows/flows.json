@@ -1,12 +1,23 @@
 [
   {
-    "name": "incomingCall",
+    "accountId": "allshellac",
+    "id": "incomingCall",
     "prettyName": "Входящий звонок",
+    "description": "Клиент звонит",
     "entityName": "incomingCall"
   },
   {
-    "name": "takeOrderByPhone",
-    "prettyName": "Оформление заказа",
+    "accountId": "allshellac",
+    "id": "takeOrderByPhone",
+    "prettyName": "Обработать заказ",
+    "description": "Поступил новый заказ",
     "entityName": "order"
+  },
+  {
+    "accountId": "demoAccount",
+    "id": "demoFlow",
+    "prettyName": "Демонстрационный процесс",
+    "description": "Пример того, что умеет AirFlows",
+    "entityName": "demoEntity"
   }
 ]

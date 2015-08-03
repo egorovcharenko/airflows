@@ -11,5 +11,6 @@
     data.ent = Entities.find()
     data.entIns = EntitiesIns.find()
     data.currentEntity = Entities.find({name: @params.type})
+    console.log "EntitiesTableController data finished"
     return data
 )

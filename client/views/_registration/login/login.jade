@@ -1,0 +1,23 @@
+template(name="Login")
+  div.container
+    .row
+      .col.s12.l6.offset-l3
+        form(id="login_form" class="account-form" role="form")
+          h3
+            | С возвращением!
+          +if errorMessage
+            div(class="alert alert-warning")
+              | {{errorMessage}}
+          div(id="login-with-password" style="padding-top: 10px;")
+            input(id="login_email" type="text" class="form-control" placeholder="Email" required autofocus)
+            input(id="login_password" type="password" class="form-control" placeholder="Пароль" required)
+            button(class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="Please wait...")
+              | Войти
+            p(class="account-form-text-after" id="register-link")
+              | Не зарегистрированы?
+              a(href="{{pathFor 'register'}}")
+                | Сделайте это здесь
+            p(class="account-form-text-after" id="forgot-password-link")
+              | Забыли пароль?
+              a(href="{{pathFor 'forgot_password'}}")
+                | Нажмите здесь

@@ -1,10 +1,12 @@
 Meteor.publish "allFlows", (args) ->
-  Flows.find()
+  currentUser = Meteor.users.findOne({_id: this.userId})
+  Flows.find({accountId: currentUser.profile.accountId})
 
 Meteor.publishComposite 'runningTasks', (userId, limit) ->
   {
     find: ->
-      FlowsIns.find { state: "running"}
+      currentUser = Meteor.users.findOne({_id: this.userId})
+      FlowsIns.find { state: "running", accountId: currentUser.profile.accountId}
     children: [
       {
         find: (flow) ->
@@ -13,22 +15,65 @@ Meteor.publishComposite 'runningTasks', (userId, limit) ->
     ]
   }
 
+Meteor.publish "allUsers", ->
+  currentUser = Meteor.users.findOne({_id: this.userId})
+  Meteor.users.find({'profile.accountId': currentUser.profile.accountId})
+
 Meteor.publish "allEntities", (args) ->
-  Entities.find()
+  currentUser = Meteor.users.findOne({_id: this.userId})
+  Entities.find({accountId: currentUser.profile.accountId})
+
+Meteor.publish "allInvitations", ->
+  currentUser = Meteor.users.findOne({_id: this.userId})
+  result = Invitations.find({accountId: currentUser.profile.accountId})
+  #console.log "result:", result.fetch()
+  result
+
+Meteor.publish "demoFlow", ->
+  Flows.find({accountId: "demoAccount", id: "demoFlow"})
+
+Meteor.publishComposite "demoFlowIns",  ->
+  {
+    find: ->
+      # запустить процесс
+      demoFlowDO = {
+        _id: Flows.findOne({
+          accountId: "demoAccount"
+          id: "demoFlow"
+          })._id
+        id: "demoFlow"
+      }
+      flowInsId = Meteor.call "runFlow", demoFlowDO
+      FlowsIns.find({_id: flowInsId, accountId: "demoAccount"})
+    children: [
+      {
+        find: (flowIns) ->
+          result = TasksIns.find({flowInsId: flowIns._id})
+          #console.log "result:", result.fetch()
+          return result
+      }
+    ]
+  }
+
+Meteor.publish "allRoles", (args) ->
+  currentUser = Meteor.users.findOne({_id: this.userId})
+  Roles.find({accountId: currentUser.profile.accountId})
 
 Meteor.publish "topEntitiesIns", (type, limit) ->
-  EntitiesIns.find({type: type}, {limit: limit})
+  currentUser = Meteor.users.findOne({_id: this.userId})
+  EntitiesIns.find({type: type, accountId: currentUser.profile.accountId}, {limit: limit})
 
 Meteor.publishComposite 'flow', (flowId) ->
   {
     find: ->
-      Flows.find { _id: flowId}
+      currentUser = Meteor.users.findOne({_id: this.userId})
+      Flows.find { _id: flowId, accountId: currentUser.profile.accountId}
     children: [
       {
         find: (flow) ->
-          console.log "flow:", flow
-          tasks = Tasks.find({flowName: flow.name})
-          console.log "tasks.count:", tasks.count()
+          #console.log "flow:", flow
+          tasks = Tasks.find({flowId: flow.id})
+          #console.log "tasks.count:", tasks.count()
           return tasks
       }
     ]

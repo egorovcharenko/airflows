@@ -2,5 +2,6 @@ collectionMap = {
   "flows": this.Flows,
   "entities": this.Entities,
   "tasks": this.Tasks,
-  "connectors": this.Connectors
+  "connectors": this.Connectors,
+  "accounts": this.Accounts
   }

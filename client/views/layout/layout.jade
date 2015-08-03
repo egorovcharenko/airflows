@@ -2,94 +2,84 @@
 head
   meta(name="viewport" content="width=device-width, initial-scale=1")
   title
-    | Airflows
+    | AirFlows
 
 template(name="layout")
   +if currentUser
     +PrivateLayout
   else
     +PublicLayout
-
+  main
+    +yield
+  footer.page-footer.teal.darken-4
+    .container
+      .row
+        .col.l6.s12
+          h5.white-text 
+          ul
+            li 
+              span.grey-text.text-lighten-4 О сервисе
+        .col.l4.offset-l2.s12
+          h5.white-text
+    .footer-copyright
+      .container
+        | © 2015 AirFlows
+        a.grey-text.text-lighten-4.right(href="#!") 
+        
 template(name="PublicLayout")
   header(id="wrap")
-    nav
-      .nav-wrapper.container
-        a.brand-logo(href="#!") Airflows
+    nav.teal.darken-4
+      .nav-wrapper.container.teal.darken-4
+        a.brand-logo(href="#!") AirFlows
         a.button-collapse(href="#" data-activates="mobile-demo")
           i.material-icons Меню
         ul.right.hide-on-med-and-down
           li
-            a(href="{{pathFor 'home_public'}}") Home
+            a(href="{{pathFor 'home_public'}}") Главная
           li
-            a(href="{{pathFor 'register'}}") Register
-          li
-            a(href="{{pathFor 'login'}}") Login
+            a(href="{{pathFor 'login'}}") Войти
+          li.deep-orange.accent-3
+            a(href="{{pathFor 'register'}}") Попробовать бесплатно
           ul#mobile-demo.side-nav
             li
-              a(href="{{pathFor 'home_public'}}") Home
+              a(href="{{pathFor 'home_public'}}") Главная
             li
-              a(href="{{pathFor 'register'}}") Register
-            li
-              a(href="{{pathFor 'login'}}") Login
-  main
-    +yield
-  footer.page-footer
-    .container
-      .row
-        .col.l6.s12
-          h5.white-text Footer Content
-          p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content
-        .col.l4.offset-l2.s12
-          h5.white-text Links
-    .footer-copyright
-      .container
-        © 2014 Copyright Text
-        a.grey-text.text-lighten-4.right(href="#!") More Links
+              a(href="{{pathFor 'login'}}") Войти
+            li.deep-orange.accent-3
+              a(href="{{pathFor 'register'}}") Попробовать бесплатно
+
 
 template(name="PrivateLayout")
   header(id="wrap")
-    nav
-      .nav-wrapper.container
-        a.brand-logo(href="#!") Airflows
+    nav.teal.darken-4
+      .nav-wrapper.container.teal.darken-4
+        a.brand-logo(href="#!") AirFlows
         a.button-collapse(href="#" data-activates="mobile-demo")
           i.material-icons Меню
         ul.right.hide-on-med-and-down
           li
-            a(href="{{pathFor 'tasks'}}") Задачи
+            a(href="{{pathFor 'tasks'}}") Мои задачи
           li
-            a(href="{{pathFor 'execute'}}") Запустить
+            a(href="{{pathFor 'execute'}}") Процессы
           li
-            a(href="{{pathFor 'flows'}}") Процессы
+            a(href="{{pathFor 'entitiesList'}}") Данные
           li
-            a(href="{{pathFor 'entitiesList'}}") Сущности
+            a(href="{{pathFor 'accountRoles'}}") Роли
+          //- li
+          //-   a(href="{{pathFor 'user_settings'}}") Настройки
           li
-            a(href="{{pathFor 'user_settings'}}") Settings
-          li
-            a(href="{{pathFor 'logout'}}") Logout
+            a(href="{{pathFor 'logout'}}") Выйти
           ul#mobile-demo.side-nav
             li
-              a(href="{{pathFor 'tasks'}}") Задачи
+              a(href="{{pathFor 'tasks'}}") Мои задачи
             li
-              a(href="{{pathFor 'execute'}}") Запустить
+              a(href="{{pathFor 'execute'}}") Процессы
             li
-              a(href="{{pathFor 'flows'}}") Процессы
+              a(href="{{pathFor 'entitiesList'}}") Данные
             li
-              a(href="{{pathFor 'entitiesList'}}") Сущности
+              a(href="{{pathFor 'accountRoles'}}") Роли
+            //- li
+            //-   a(href="{{pathFor 'user_settings'}}") Настройки
             li
-              a(href="{{pathFor 'user_settings'}}") Settings
-            li
-              a(href="{{pathFor 'logout'}}") Logout
-  main
-    +yield
-  footer.page-footer
-    .container
-      .row
-        .col.l6.s12
-          h5.white-text Footer Content
-          p.grey-text.text-lighten-4 You can use rows and columns here to organize your footer content
-        .col.l4.offset-l2.s12
-          h5.white-text Links
-    .footer-copyright
-      .container
-        © 2014 Copyright Text
-        a.grey-text.text-lighten-4.right(href="#!") More Links
+              a(href="{{pathFor 'logout'}}") Выйти
+  

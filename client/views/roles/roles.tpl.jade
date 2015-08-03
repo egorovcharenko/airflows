@@ -1,0 +1,41 @@
+#content.container
+  #title_row.row
+    .col.s12
+      #page_menu.pull-right
+  .row#links-container
+    .row
+      table.bordered
+        thead
+          tr
+            th Роль
+            th Пользователи
+        tbody
+          each this.roles
+            +singleRole
+    .row
+      .col.s12.m6
+        .card
+          .card-content
+            .card-title.black-text
+              h5 Добавить новую роль
+            .input-field
+              input.validate(id="role-name" type="text")
+              label(for="role-name") Название новой роли
+          .card-action
+            a#add-new-role.btn.waves-effect.waves-light.white-text Добавить
+      .col.s12.m6
+        .card
+          .card-content
+            .card-title.black-text
+              h5 Пригласить человека
+            .input-field
+              input.validate(id="invite-email" type="email")
+              label(for="invite-email") Email
+          .card-action
+            a#send-invite.btn.waves-effect.waves-light.white-text Отправить приглашение
+        h5 Не использованные приглашения:
+        ul.collection
+          each this.invitations
+            li.collection-item #{email}
+            
+            

@@ -1,0 +1,21 @@
+tr
+  td 
+    .row
+      .col.s8
+        p #{prettyName}
+      .col.s4
+        a#delete_role.waves-effect.waves-light.btn Удалить роль
+  td
+    each users
+      .row
+        .col.s8
+          p {{usernameFor id}}
+        .col.s4
+          a#detach_user_from_role.waves-effect.waves-light.btn(data-role-id = "#{../_id}") Удалить
+    .input-field.col.s8.role-selector
+      select.role-selector
+        option.role-selector(value="0000",disabled,selected) Добавьте человека на роль
+        each ../users
+          option.role-selector(value='#{_id}') #{profile.name}
+    .col.s4
+      a#add-new-user-to-role.waves-effect.waves-light.btn Добавить

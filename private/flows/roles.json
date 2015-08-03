@@ -1,0 +1,32 @@
+[
+  {
+    "accountId": "allshellac",
+    "id": "unassigned",
+    "prettyName": "Без исполнителя",
+    "users" : []
+  },
+  {
+    "accountId": "allshellac",
+    "id": "operator",
+    "prettyName": "Роль 1",
+    "users" : []
+  },
+  {
+    "accountId": "allshellac",
+    "id": "role2",
+    "prettyName": "Роль 2",
+    "users" : []
+  },
+  {
+    "accountId": "demoAccount",
+    "id": "role1",
+    "prettyName": "Роль 1",
+    "users" : []
+  },
+  {
+    "accountId": "demoAccount",
+    "id": "role2",
+    "prettyName": "Роль 2",
+    "users" : []
+  }
+]

@@ -1,39 +1,54 @@
-#content.page-container
+#content.page-container-draw
   #title_row.row
-    .col-md-12
+    .col.s12
       #page_menu.pull-right
   .row#links-container
     table
       tbody
+        tr
+          each this.roles
+            td.role-name-cell(colspan="{{width}}") #{prettyName}
         each this.rows
           tr
             each this
               if notEmpty
-                if isEnd
-                  td.top-aligned(colspan="{{maxColspan}}")
+                td(colspan="{{maxColspan}}" class="top-aligned task-td {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}{{#if isEnd}}end-cell {{/if}}{{#if isStart}}white-text{{/if}}")
+                  if isNotStart
+                    .row.add-task-before-row
+                      .col.s12.center-align
+                        a.btn-floating.waves-effect.waves-light.red(id="add-task-before")
+                          i.medium.mdi-action-note-add
+                  if isEnd
                     .row.end
                       .col.s12
-                        .card.end-card(id="{{task._id}}").orange.darken-3
+                        .card.end-card(id="{{task._id}}").teal.darken-3
                           h5.flow-text.white-text Конец
-                else
-                  td.top-aligned.task-td
-                    if task.editMode
-                      .row.add-task-before-row
-                        .col.s12.center-align
-                          a.btn-floating.waves-effect.waves-light.red(id="add-task-before")
-                            i.medium.mdi-action-note-add
-                    div(class="card task-panel {{#if isStart}}orange darken-3{{/if}}", id="{{task._id}}")
+                  else
+                    div(class="card task-panel {{#if isStart}}teal darken-3{{/if}}", id="{{task._id}}")
+                      p {{{debugInfo}}}
                       if task.editMode
-                        .input-field.col.s12
-                          input.validate(id="last_name" type="text" value="{{task.name}}")
-                          label.active(for="last_name") Название
-                        .input-field.col.s12
-                          textarea.materialize-textarea(id="textarea_instructions")
-                            | {{task.instructions}}
-                          label.active(for="instructions") Инструкции
+                        if isNotStart
+                          .row
+                            .input-field.col.s12
+                              input.validate(id="last_name" type="text" value="{{task.name}}")
+                              label.active(for="last_name") Название
+                          .row
+                            .input-field.col.s12
+                              textarea.materialize-textarea(id="textarea_instructions")
+                                | {{task.instructions}}
+                              label.active(for="instructions") Инструкции
+                        .row
+                          .input-field.col.s12.black-text
+                            select.browser-default
+                              //- option(value="00",disabled,selected) Выберите роль
+                              each allRoles
+                                option(value='#{id}' selected="{{isRoleSelected}}") #{prettyName}
+                            //label Выберите роль
                       else
                         if isStart
-                          h5.flow-text.white-text Начало
+                          a#start_editing_task.waves-effect.waves-light.right
+                            i.tiny.mdi-editor-mode-edit
+                          h5.flow-text.white-text.center-align Начало
                         else
                           .row.header
                             .col.s6
@@ -48,6 +63,9 @@
                               p #{task.instructions}
                       if hasDecisions
                         if task.editMode
+                          .row
+                            .col.s12.center-align
+                              a#save-edited-task.waves-effect.waves-light.btn Сохранить
                           .decisions-container-edit
                             each task.decisions
                               .row.decision-row
@@ -68,6 +86,7 @@
                               .col.s2
                                 a#add-decision.waves-effect.waves-light.btn.add-decision
                                   i.medium.mdi-content-add
+                          
                         else
                           .decisions-container
                             each task.decisions
@@ -77,6 +96,9 @@
                                     span.white-text #{name}
                       else
                         if task.editMode
+                          .row
+                            .col.s12.center-align
+                              a#save-edited-task.waves-effect.waves-light.btn Сохранить
                           .row.connectionsActive
                             .col.s6.offset-s3.center-align
                               each taskConnections
@@ -90,9 +112,5 @@
                             .col.s6.offset-s3.center-align.connections-row
                               each taskConnections
                                 span.connection-dot(id="connection-from-{{sourceId}}-to-{{destinationId}}") &middot;
-                      if task.editMode
-                        .row
-                          .col.s12.center-align
-                            a#save-edited-task.waves-effect.waves-light.btn Сохранить
               else
-                td.empty
+                td(class="empty {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}")

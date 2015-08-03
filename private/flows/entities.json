@@ -1,5 +1,6 @@
 [
   {
+    "accountId": "allshellac",
     "name": "incomingCall",
     "prettyName": "Входящий звонок",
     "fieldsToShow": [
@@ -8,9 +9,9 @@
         "prettyName": "Причина звонка"
       }
     ]
-
   },
   {
+    "accountId": "allshellac",
     "name": "order",
     "prettyName": "Заказ"
   }

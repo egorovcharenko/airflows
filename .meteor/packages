@@ -12,9 +12,7 @@ accounts-base
 email
 spiderable
 iron:router
-natestrauser:font-awesome
 matb33:collection-hooks
-perak:user-roles
 copleykj:livestamp
 reactive-dict
 accounts-password
@@ -27,3 +25,7 @@ materialize:materialize
 jsplumb:jsplumb
 jquery
 jaywon:meteor-node-uuid
+fourseven:scss
+alanning:roles
+perak:user-roles
+wylio:mandrill

@@ -1,0 +1,240 @@
+[
+  {
+    "flowName": "incomingCall",
+    "pos": "1",
+    "type": "start",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos":["2"],
+    "stateAfterThisTask": "В работе"
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "2",
+    "type": "task",
+    "name": "Greetings",
+    "instructions": "Greet the client: «(Your name), XYZ company, how can I help you?»",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["3"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "3",
+    "type": "decision",
+    "name": "What is the purpose of the call?",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "decisions": [
+      {
+        "id": "1",
+        "name": "Client needs an advice",
+        "nextPos": ["4"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Консультация"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "name": "Client wants to place an order",
+        "nextPos": ["5"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Оформление заказа"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "name": "Client has an urgent problem",
+        "nextPos": ["7"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Срочная проблема"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "name": "Any other case",
+        "nextPos": ["8"],
+        "stateAfterThisTask": "",
+        "setFields": [
+          {
+            "name": "reason",
+            "askUser": false,
+            "value": "Любая другая проблема"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "4",
+    "type": "task",
+    "name": "Offer assistance",
+    "instructions": "Time limit: 10 mins. If time limit is exceeded, kindly offer the client to log a ticket on a website",
+    "role": "consultant",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "5",
+    "type": "decision",
+    "name": "Ask the client to place on order on a website",
+    "instructions": "Politely ask the client to place an order on a website.",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "decisions": [
+      {
+        "id": "5",
+        "name": "Client wants to place an order over the phone anyway",
+        "nextPos": ["6"],
+        "stateAfterThisTask": ""
+      },
+      {
+        "id": "6",
+        "name": "Agrees to place an order on website",
+        "nextPos": ["999"],
+        "stateAfterThisTask": ""
+      }
+    ],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "6",
+    "type": "embeddedFlow",
+    "subFlowName": "takeOrderByPhone",
+    "name": "Subprocess: Place an order in CRM",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "7",
+    "type": "task",
+    "name": "Help the client solve the problem",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "8",
+    "type": "decision",
+    "name": "Ask the client to log the ticket on website",
+    "instructions": "Tell the client it will be faster that way for him to get his problem solved",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "decisions": [
+      {
+        "id": "7",
+        "name": "Client wants to log the problem oer the phone anyway",
+        "desc": "описание",
+        "nextPos": ["9"],
+        "stateAfterThisTask": ""
+      },
+      {
+        "id": "8",
+        "name": "Agrees to log the ticket himself",
+        "desc": "описание",
+        "nextPos": ["999"],
+        "stateAfterThisTask": ""
+      }
+    ],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "9",
+    "type": "task",
+    "name": "Log the ticket in a support desk app",
+    "subFlowName": "inputProblemIntoFreshdesk",
+    "instructions": "",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "incomingCall",
+    "pos": "999",
+    "type": "end",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos": [""],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "takeOrderByPhone",
+    "pos": "1",
+    "type": "start",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos": ["2"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "takeOrderByPhone",
+    "pos": "2",
+    "type": "task",
+    "name": "Make a new order entity",
+    "instructions": "Click Orders->New order",
+    "role": "operator",
+    "minutesNeeded": "1",
+    "subtaskId": "",
+    "nextPos": ["999"],
+    "stateAfterThisTask": ""
+  },
+  {
+    "flowName": "takeOrderByPhone",
+    "pos": "999",
+    "type": "end",
+    "name": "",
+    "instructions": "",
+    "role": "",
+    "minutesNeeded": "",
+    "subtaskId": "",
+    "nextPos": [""],
+    "stateAfterThisTask": ""
+  }
+]

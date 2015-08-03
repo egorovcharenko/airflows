@@ -1,5 +1,6 @@
 accounts-base@1.2.0
 accounts-password@1.1.1
+alanning:roles@1.2.13
 autoupdate@1.2.1
 base64@1.0.3
 binary-heap@1.0.3
@@ -15,6 +16,7 @@ deps@1.0.7
 ejson@1.0.6
 email@1.0.6
 fastclick@1.0.3
+fourseven:scss@3.2.0
 geojson-utils@1.0.3
 html-tools@1.0.4
 htmljs@1.0.4
@@ -50,11 +52,10 @@ mongo@1.1.0
 mquandalle:jade@0.4.3
 mquandalle:jade-compiler@0.4.3
 mrt:moment@2.8.1
-natestrauser:font-awesome@4.3.0
 npm-bcrypt@0.7.8_2
 observe-sequence@1.0.6
 ordered-dict@1.0.3
-perak:joins@1.0.4
+perak:joins@1.0.6
 perak:user-roles@1.0.10
 random@1.0.3
 reactive-dict@1.1.0
@@ -78,3 +79,4 @@ underscore@1.0.3
 url@1.0.4
 webapp@1.2.0
 webapp-hashing@1.0.3
+wylio:mandrill@1.0.1
