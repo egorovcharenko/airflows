@@ -1,7 +1,9 @@
 if hasCurrentTasks
   .card.teal.lighten-4
     .card-content
-      .card-title.panel-title.black-text #{name}
+      .card-title.panel-title.black-text 
+        p #{logDataContext}
+        p #{name}
       each subTasks
         if showTask
           div(class="card {{#if isPreend}}teal{{else}}{{#if isTaskNotCurrent}}{{#if isTaskCompleted}}teal{{else}}teal{{/if}}{{else}}teal{{/if}}{{/if}}")
@@ -34,4 +36,4 @@ if hasCurrentTasks
           a#cancel-button.btn.waves-effect.waves-light.teal.darken-1
             .white-text Отменить процесс
 else if isDemo
-  h5.center-aligned Демо-процесс завершен. Попробуйте AirFlows бесплатно!
+  p.center-align Демо-процесс завершен

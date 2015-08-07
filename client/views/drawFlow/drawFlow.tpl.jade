@@ -13,18 +13,28 @@
             each this
               if notEmpty
                 td(colspan="{{maxColspan}}" class="top-aligned task-td {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}{{#if isEnd}}end-cell {{/if}}{{#if isStart}}white-text{{/if}}")
-                  if isNotStart
-                    .row.add-task-before-row
-                      .col.s12.center-align
-                        a.btn-floating.waves-effect.waves-light.red(id="add-task-before")
-                          i.medium.mdi-action-note-add
                   if isEnd
-                    .row.end
-                      .col.s12
-                        .card.end-card(id="{{task._id}}").teal.darken-3
+                    div(class="card task-panel")
+                      // кнопка добавить перед
+                      a.btn-floating.waves-effect.waves-light.deep-orange.add-task-before(id="add-task-before")
+                        i.medium.mdi-action-note-add
+                      .card.end-card(id="{{task._id}}").teal.darken-3
+                        .card-content
                           h5.flow-text.white-text Конец
                   else
                     div(class="card task-panel {{#if isStart}}teal darken-3{{/if}}", id="{{task._id}}")
+                      if isNotEnd
+                        if isNotStart
+                          // кнопка добавить справа
+                          a.btn-floating.waves-effect.waves-light.deep-orange.add-task-to-the-right(id="add-task-to-the-right")
+                            i.medium.mdi-action-note-add
+                          // кнопка добавить слева
+                          a.btn-floating.waves-effect.waves-light.deep-orange.add-task-to-the-left(id="add-task-to-the-left")
+                            i.medium.mdi-action-note-add
+                      // кнопка добавить перед
+                      if isNotStart
+                        a.btn-floating.waves-effect.waves-light.deep-orange.add-task-before(id="add-task-before")
+                          i.medium.mdi-action-note-add
                       p {{{debugInfo}}}
                       if task.editMode
                         if isNotStart
@@ -63,54 +73,55 @@
                               p #{task.instructions}
                       if hasDecisions
                         if task.editMode
-                          .row
-                            .col.s12.center-align
-                              a#save-edited-task.waves-effect.waves-light.btn Сохранить
                           .decisions-container-edit
                             each task.decisions
                               .row.decision-row
-                                .tight.col.s8.center-align
-                                  .card-panel.teal.decision-text(id="{{id}}")
+                                .tight.col.s12.center-align
+                                  .card-panel.teal.decision-text(id="task_{{../task._id}}_decision_{{id}}" data-source="{{sourceId}}", data-destination="{{destinationId}}")
                                     span.white-text #{name}
-                                .tight.col.s2.center-align
-                                  a#remove-decision.btn-floating.waves-effect.waves-light.btn-connect.connectionRemoveButton
-                                    i.tiny.mdi-action-highlight-remove(data-decision-id="{{id}}", data-task-id="{{../task._id}}")
-                                .tight.col.s2.center-align
-                                  a(id="decision-{{id}}")
-                                    a.btn-floating.waves-effect.waves-light.btn-connect.connectionRemoveButton(id = "new_connection_for_task_{{../task._id}}_with_decision_{{id}}")
-                                      i.tiny.mdi-content-redo(data-source="{{sourceId}}", data-destination="{{destinationId}}")
-                            .row.input-new-decision.center-align
-                              .col.s8
-                                input-field
-                                  input#newDecisionName(type="text" class="validate")
-                              .col.s2
-                                a#add-decision.waves-effect.waves-light.btn.add-decision
-                                  i.medium.mdi-content-add
-                          
+                                a#remove-decision.btn-floating.red.btn-connect.connectionRemoveButton.remove-decision-button
+                                  i.mdi-action-highlight-remove(data-decision-id="{{id}}", data-task-id="{{../task._id}}")
                         else
                           .decisions-container
                             each task.decisions
                               .row.decision-row
                                 .col.s12.right-tight
-                                  .card-panel.teal.decision-text(id="decision-{{id}}")
+                                  .card-panel.teal.decision-text(id="task_{{../task._id}}_decision_{{id}}")
                                     span.white-text #{name}
-                      else
-                        if task.editMode
-                          .row
-                            .col.s12.center-align
-                              a#save-edited-task.waves-effect.waves-light.btn Сохранить
-                          .row.connectionsActive
-                            .col.s6.offset-s3.center-align
-                              each taskConnections
-                                a(id="connection-from-{{sourceId}}-to-{{destinationId}}")
-                                  a#remove-connection.btn-floating.waves-effect.waves-light.red.btn-connect.connectionRemoveButton
-                                    i.tiny.mdi-action-highlight-remove(data-source="{{sourceId}}", data-destination="{{destinationId}}")
-                            a.btn-floating.btn-connect.waves-effect.waves-light.red(id="new-connection-from-{{task._id}}")
+                      if task.editMode
+                        .row.input-new-decision.center-align
+                          .col.s10
+                            input-field
+                              input#newDecisionName(type="text" class="validate")
+                          .col.s2
+                            a#add-decision.waves-effect.waves-light.btn.add-decision
                               i.medium.mdi-content-add
+                      if task.editMode
+                        .row
+                          .col.s12.center-align
+                            a#save-edited-task.waves-effect.waves-light.btn Сохранить
+                      if doesNotHaveDecisions
+                        if task.editMode
+                          .row.connectionsActive
+                            .col.s12.center-align
+                              if notLastConnection
+                                each taskConnections
+                                  a(id="connection-from-{{sourceId}}-to-{{destinationId}}")
+                                    a#remove-connection.btn-floating.waves-effect.waves-light.red.btn-connect.connectionRemoveButton
+                                      i.tiny.mdi-action-highlight-remove(data-source="{{sourceId}}", data-destination="{{destinationId}}")
+                              else
+                                each taskConnections
+                                  a(id="connection-from-{{sourceId}}-to-{{destinationId}}")
+                                    a.btn-floating.waves-effect.waves-light.red.btn-connect.connectionRemoveButton
+                              a.btn-floating.btn-connect.waves-effect.waves-light.red(id="new-connection-from-{{task._id}}")
+                                i.medium.mdi-content-add
                         else
                           .row.connections
-                            .col.s6.offset-s3.center-align.connections-row
+                            .col.s12.center-align.connections-row
                               each taskConnections
                                 span.connection-dot(id="connection-from-{{sourceId}}-to-{{destinationId}}") &middot;
+                                  // кнопка добавить снизу
+                                  a.btn-floating.waves-effect.waves-light.deep-orange.add-task-after(id="add-task-after")
+                                    i.medium.mdi-action-note-add
               else
                 td(class="empty {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}")

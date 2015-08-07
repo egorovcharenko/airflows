@@ -48,6 +48,7 @@ Meteor.methods
               console.log "error:", error
 
   "stepBack": (dataObject) ->
+    console.log "stepBack started, data:", dataObject
     # текущую задачу сделать новой
     TasksIns.update({_id: dataObject._id}, {$set: {state: "new"}})
     # предыдущую задачу сделать текущей

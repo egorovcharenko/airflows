@@ -2,6 +2,71 @@ $accent-color-1: #ff3d00
 $accent-text-color-1: white
 $primary-color-dark: #009688
 
+.remove-decision-button, .remove-decision-button i
+  position: absolute
+  top: -10px
+  right: 0
+  width: 20px
+  height: 20px
+  font-size: 14pt
+  line-height: 29pt
+
+.task-td
+  position: relative
+
+.task-td .card
+  overflow: visible
+  padding-top: 10px
+  padding-bottom: 10px
+
+.add-task-button
+  position: absolute
+  width: 20px
+  height: 20px
+  z-index: 100
+
+.add-task-to-the-left
+  @extend .add-task-button
+  left: -10px
+  top:0
+  bottom:0
+  margin-top: auto
+  margin-bottom: auto
+
+.add-task-after
+  @extend .add-task-button
+  bottom: -10px
+  left:0
+  right:0
+  margin-left:auto
+  margin-right:auto
+
+.add-task-before
+  @extend .add-task-button
+  left:0
+  right:0
+  margin-left:auto
+  margin-right:auto
+  top: -10px
+
+.add-task-to-the-right
+  @extend .add-task-button
+  right: -10px
+  top:0
+  bottom:0
+  margin-top: auto
+  margin-bottom: auto
+
+.add-task-to-the-right i, .add-task-to-the-left i, .add-task-before i
+  top: 8px
+  position: absolute
+  font-size: 12pt
+  line-height: 4pt
+
+.add-task-after i
+  font-size: 12pt
+  line-height: 1pt
+
 .home-hero-row
   margin-top: 50px
   margin-bottom: 30px
@@ -52,6 +117,7 @@ $primary-color-dark: #009688
   padding-left: 10px
   padding-right: 10px
   padding-bottom: 0px
+  position: relative
 
 .add-task-before-row
   margin-bottom: 0px
@@ -62,7 +128,7 @@ $primary-color-dark: #009688
 
 .tight
   padding-left: 0px
-  padding: 2px
+  padding: 0px
 
 .start, .end
   margin: 5px
@@ -75,6 +141,7 @@ $primary-color-dark: #009688
   z-index: 5
 
 .connection-dot
+  position: relative
   width: 1px
   height: 1px
   font-size: 1px
@@ -117,6 +184,8 @@ $primary-color-dark: #009688
 
 .decision-row
   margin: 0px
+  position: relative
+  text-align: left
 
 .decisions-container
   margin-bottom: 10px
@@ -142,7 +211,10 @@ $primary-color-dark: #009688
   z-index: 1
 
 ._jsPlumb_connector, ._jsPlumb_overlay
-  z-index: -100
+  z-index: 1
+
+.btn, a, .waves-effect
+  z-index: 2
 
 .end-card
   text-align: center

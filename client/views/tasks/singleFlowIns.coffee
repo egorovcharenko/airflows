@@ -6,7 +6,6 @@ Template.singleFlowIns.helpers
 			#console.log "userRoles:",userRoles
 			TasksIns.find({flowInsId: @_id, type: {$nin:["start", "end"]}, state: "current", roleId: {$in: userRoles}})
 		else
-
 			result = TasksIns.find({type: {$nin:["start", "end"]}, state: "current", roleId: {$in: ["role1", "role2"]}})
 			#console.log "flowInsId:",@_id, ", result:", result.fetch()
 			return result
@@ -53,6 +52,9 @@ Template.singleFlowIns.helpers
 			true
 		else
 			false
+	logDataContext: ->
+		console.log "logDataContext:", this
+
 Template.singleFlowIns.events
 	"click #task-completed": (event, template) ->
 		dataObject = this
@@ -72,6 +74,7 @@ Template.singleFlowIns.events
 				console.log "error", error
 	"click #back-button": (event, template) ->
 		dataObject = this # task
+		dataObject.flowsInsId = this.flowId
 		Meteor.call "stepBack", dataObject, (error, result) ->
 			if error
 				console.log "error", error

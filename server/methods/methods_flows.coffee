@@ -2,12 +2,13 @@ Meteor.methods
   "runFlow": (dataObject) ->
     console.log "runFlow started, data:", dataObject
     flow = Flows.findOne(_id: dataObject._id)
-    console.log "flow:", flow
+    #console.log "flow:", flow
     accountId = flow.accountId
     # создать экземпляр
     flowInstance = {}
     flowInstance.flowId = dataObject._id
     flowInstance.name = if dataObject.insName then dataObject.insName else flow.prettyName
+    console.log "flowInstance.name:", flowInstance.name
     flowInstance.state = "running"
     flowInstance.accountId = accountId
     if dataObject.parentTaskInsId?
@@ -16,7 +17,7 @@ Meteor.methods
     flowInsId = FlowsIns.insert flowInstance
     # скопировать задания в экземпляры
     tasks = (Tasks.find({flowId: dataObject.id})).fetch()
-    console.log "tasks:", tasks
+    #console.log "tasks:", tasks
     for task in tasks
       taskIns = task
       delete taskIns._id

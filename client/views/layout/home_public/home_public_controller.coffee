@@ -7,7 +7,6 @@
     ]
 
   onBeforeAction: ->
-
     this.next()
 
   data: ->
@@ -15,8 +14,8 @@
     # найти его экземпляр и вернуть
     myTasksParentFlowsIds = _.map(TasksIns.find({state:"current", roleId: {$in: ["role1"]}}).fetch(), (task) -> task.flowInsId )
     #console.log "myTasksParentFlowsIds:",myTasksParentFlowsIds
-    flowsIns = FlowsIns.find({_id: {$in: myTasksParentFlowsIds}, parentTaskInsId: {$exists: false}})
-    result = flowsIns
-    #console.log "result:", result.fetch()
+    flowsIns = FlowsIns.findOne({_id: {$in: myTasksParentFlowsIds}, parentTaskInsId: {$exists: false}})
+    result = flowsIns#.fetch()
+    console.log "result:", result#.fetch()
     return result
 )

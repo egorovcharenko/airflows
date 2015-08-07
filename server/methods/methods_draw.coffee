@@ -1,33 +1,33 @@
+@createEmptyTask = (task, accountId, tasks) ->
+  # добавить новую со ссылкой на следующую
+  newTask = {}
+  newTask.accountId = accountId
+  newTask.nextPos = []
+  newTask.flowId = task.flowId
+  newTask.pos = uuid.v4()
+  newTask.type = "task"
+  if not task.roleId?
+    taskFound = Tasks.findOne({flowId:task.flowId, roleId: {$exists: true}})
+    if taskFound?
+      newTask.roleId = taskFound.roleId
+    else
+      newTask.roleId = "unassigned"
+  else
+    newTask.roleId = task.roleId
+  console.log "newTask.roleId:#{newTask.roleId}"
+  newTask.editMode = true
+  return newTask
+
 Meteor.methods
   "addTaskBefore": (task) ->
     console.log "starting addTaskBefore:", task
     accountId = Meteor.user().profile.accountId
     tasks = Tasks.find({flowId: task.flowId}).fetch()
-    #console.log "tasks:", tasks
-    # найти максимальную позицию
-    maxPos = parseInt(_.max(tasks, (task) -> task.pos).pos)
-    # добавить новую со ссылкой на следующую
-    newTask = {}
-    newTask.accountId = accountId
-    newTask.nextPos = []
+    newTask = createEmptyTask task, accountId, tasks
     newTask.nextPos.push task.pos
-    newTask.flowId = task.flowId
-    newTask.pos = maxPos + 1
-    newTask.type = "task"
-    if not task.roleId?
-      taskFound = Tasks.findOne({flowId:task.flowId, roleId: {$exists: true}})
-      if taskFound?
-        newTask.roleId = taskFound.roleId
-      else
-        newTask.roleId = "unassigned"
-    else
-      newTask.roleId = task.roleId
-    console.log "newTask.roleId:#{newTask.roleId}"
-    newTask.editMode = true
     newTaskId = Tasks.insert newTask
     #console.log "newTaskId:",newTaskId
     for eachTask in tasks
-      #console.log "iterating thru:", eachTask
       # найти каждую ссылающуюся задачу
       if eachTask.nextPos?
         if _.contains(eachTask.nextPos, task.pos)
@@ -39,6 +39,73 @@ Meteor.methods
         for decision in eachTask.decisions
           if _.contains(decision.nextPos, task.pos)
             newPos = _.without(decision.nextPos, task.pos)
+            newPos.push newTask.pos
+            Tasks.update({_id: eachTask._id, "decisions.id": decision.id}, {$set: {"decisions.$.nextPos": _.uniq(newPos)}})
+
+  "addTaskToTheSide": (task) ->
+    console.log "addTaskToTheSide started, task:#{task}"
+    # создаем новую задачу
+    accountId = Meteor.user().profile.accountId
+    tasks = Tasks.find({flowId: task.flowId}).fetch()
+    newTask = createEmptyTask task, accountId, tasks
+    # проставляем исходящую ссылку
+    if task.decisions?
+      newTask.nextPos = task.decisions[0].nextPos
+    else
+      newTask.nextPos = task.nextPos
+    newTaskId = Tasks.insert newTask
+    #console.log "newTaskId:",newTaskId
+
+    # добавляем ссылки на нее у всех ссылающихся
+    for eachTask in tasks
+      # найти каждую ссылающуюся задачу
+      if eachTask.nextPos?
+        if _.contains(eachTask.nextPos, task.pos)
+          newPos = eachTask.nextPos
+          newPos.push newTask.pos
+          Tasks.update({_id: eachTask._id}, {$set: {nextPos: _.uniq(newPos)}})
+      # найти каждое ссылающееся решение
+      if eachTask.decisions?
+        for decision in eachTask.decisions
+          if _.contains(decision.nextPos, task.pos)
+            newPos = decision.nextPos
+            newPos.push newTask.pos
+            Tasks.update({_id: eachTask._id, "decisions.id": decision.id}, {$set: {"decisions.$.nextPos": _.uniq(newPos)}})
+
+  "addTaskAfter": (task, nextPos) ->
+    console.log "addTaskAfter started, task:#{task}, nextPos:#{nextPos}"
+    # создаем новую задачу
+    accountId = Meteor.user().profile.accountId
+    tasks = Tasks.find({flowId: task.flowId}).fetch()
+    newTask = createEmptyTask task, accountId, tasks
+    # проставляем исходящую ссылку
+    if not task.decisions?
+      nextPos = task.nextPos[0]
+      #nextPosTask = _.findWhere(tasks, {pos: nextPos})
+      nextTaskPos = nextPos[0]
+      newNextPos = _.without(nextPos, nextTaskPos)
+      newNextPos.push newTask.pos
+
+      newTask.nextPos.push nextPos
+      Tasks.update ({_id: task._id}, {$set: {nextPos: []}})
+    else
+      newTask.nextPos = task.nextPos
+    newTaskId = Tasks.insert newTask
+    #console.log "newTaskId:",newTaskId
+
+    # добавляем ссылки на нее у всех ссылающихся
+    for eachTask in tasks
+      # найти каждую ссылающуюся задачу
+      if eachTask.nextPos?
+        if _.contains(eachTask.nextPos, task.pos)
+          newPos = eachTask.nextPos
+          newPos.push newTask.pos
+          Tasks.update({_id: eachTask._id}, {$set: {nextPos: _.uniq(newPos)}})
+      # найти каждое ссылающееся решение
+      if eachTask.decisions?
+        for decision in eachTask.decisions
+          if _.contains(decision.nextPos, task.pos)
+            newPos = decision.nextPos
             newPos.push newTask.pos
             Tasks.update({_id: eachTask._id, "decisions.id": decision.id}, {$set: {"decisions.$.nextPos": _.uniq(newPos)}})
 
@@ -64,6 +131,11 @@ Meteor.methods
       nextPosisions = task.nextPos
     console.log "nextPosisions:",nextPosisions
     for eachTask in tasks
+      # если ссылок больше одной, то просто удалить ссылку
+      if eachTask.nextPos?
+        if eachTask.nextPos.length > 1
+          Tasks.update({_id: eachTask._id}, {$set: {"nextPos": _.without(eachTask.nextPos, task.pos)}})
+          continue
       # найти каждую ссылающуюся задачу
       if _.contains(eachTask.nextPos, task.pos)
         # найти все задачи, ссылающиеся на нее, и перевести на нее
@@ -106,17 +178,38 @@ Meteor.methods
     Tasks.update({_id: sourceId}, {$set: {nextPos: _.uniq(_.without(sourceTask.nextPos, destTask.pos))}})
 
   "addDecision": (task, newDecisionName) ->
+    #console.log "task:", task
+    currentDecisions = task.decisions
     newDecision = {}
     newDecision.name = newDecisionName
     newDecision.id = uuid.v4()
-    endTask = Tasks.findOne({flowId: task.flowId, type: "end"})
-    newDecision.nextPos = [endTask.pos]
+    if currentDecisions?
+      endTask = Tasks.findOne({flowId: task.flowId, type: "end"})
+      newDecision.nextPos = [endTask.pos]
+    else
+      newDecision.nextPos = task.nextPos
+      Tasks.update({_id: task._id}, {$set: {nextPos: null, decisions: []}})
     console.log "newDecision:", newDecision
     Tasks.update({_id: task._id}, {$push: {decisions: newDecision}})
 
   "removeTaskDecision": (taskId, decisionIdToRemove) ->
     console.log "removeTaskDecision started, taskId:#{taskId}, decisionIdToRemove:#{decisionIdToRemove}"
-    Tasks.update({_id: taskId}, {$pull: {decisions: {id: decisionIdToRemove}}})
+    decisions = Tasks.findOne({_id: taskId}).decisions
+    decisionsCount = decisions.length
+    console.log "decisionsCount:", decisionsCount
+    if decisionsCount > 1
+      Tasks.update({_id: taskId}, {$pull: {decisions: {id: decisionIdToRemove}}})
+    else
+      nextPos = _.findWhere(decisions, {id: decisionIdToRemove}).nextPos
+      # поставить следующую задачу
+      Tasks.update({_id: taskId}, {$set: {"nextPos": _.uniq(nextPos)}})
+
+      # удалить последнее решение
+      Tasks.update({_id: taskId}, {$pull: {decisions: {id: decisionIdToRemove}}})
+
+      # обнулить решения
+      Tasks.update({_id: taskId}, {$set: {decisions: null}})
+
 
   "makeDecisionConnection": (dataObject) ->
     console.log "makeDecisionConnection started, dataObject:#{dataObject}"
@@ -125,6 +218,7 @@ Meteor.methods
     newPosArray = []
     newPosArray.push newPos
     Tasks.update({_id: dataObject.taskId, "decisions.id": dataObject.decisionId}, {$set: {"decisions.$.nextPos": _.uniq(newPosArray)}})
+
 
 @willHaveLoops = (tasks, proposedConnection) ->
   # proposedConnection = {sourcePos: pos1, targetPos: pos2, sourceDecisionId: id1, targetDecisionPos: pos}

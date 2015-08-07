@@ -1,8 +1,29 @@
 Template.drawFlow.events
 	'click #add-task-before': (event, template) ->
     # добавить новую задачу
-		#console.log "this.task:", this.task
 		Meteor.call "addTaskBefore", this.task, (error, result) ->
+			if error
+				console.log "error", error
+			if result
+				console.log "success"
+	'click #add-task-to-the-right': (event, template) ->
+		#console.log "this.task:", this.task
+    # добавить новую задачу
+		Meteor.call "addTaskToTheSide", this.task, (error, result) ->
+			if error
+				console.log "error", error
+			if result
+				console.log "success"
+	'click #add-task-to-the-left': (event, template) ->
+    # добавить новую задачу
+		Meteor.call "addTaskToTheSide", this.task, (error, result) ->
+			if error
+				console.log "error", error
+			if result
+				console.log "success"
+	'click #add-task-after': (event, template) ->
+    # добавить новую задачу
+		Meteor.call "addTaskAfter", this.task, (error, result) ->
 			if error
 				console.log "error", error
 			if result
@@ -68,8 +89,8 @@ Template.drawFlow.helpers
 	allRoles: ->
 		return Roles.find({})
 	isRoleSelected: ->
-		console.log "this.id:", this.id
-		console.log "task.roleId:",Template.parentData().task.roleId
+		#console.log "this.id:", this.id
+		#console.log "task.roleId:",Template.parentData().task.roleId
 		this.id == Template.parentData().task.roleId
 	classForSelectedRole: ->
 		if this.id == Template.parentData().task.roleId
@@ -87,24 +108,25 @@ Template.drawFlow.helpers
 		this.task.type != "start"
 	isEnd: ->
 		this.task.type == "end"
+	isNotEnd: ->
+		this.task.type != "end"
 	hasPreData: ->
 		this.task.preData?
 	hasDecisions: ->
 		this.task.decisions?
+	doesNotHaveDecisions: ->
+		not this.task.decisions?
 	maxColspan: ->
 		#console.log Router.current().data()
 		if this.task.type == "end"
 			Router.current().data().params.maxX + 1
 		else
 			1
+
 	taskConnections: ->
 		#console.log "this:", this
-		result = []
-		if this.task.nextPos?
-			for nextPos in this.task.nextPos
-				result.push {sourceId: this.task._id, destinationId: Tasks.findOne({pos: nextPos})._id}
-		#console.log "result:", result
-		result
+		getTaskConnections this.task
+
 	hasLeftBorder: ->
 		this.hasLeftBorder
 
@@ -115,6 +137,20 @@ Template.drawFlow.helpers
 		"operator-#{this.task.roleWidth['operator']}<br>
 		role2-#{this.task.roleWidth['role2']}<br>
 		roleId-#{this.task.roleId}"
+
+	notLastConnection: ->
+		connections = getTaskConnections this.task
+		console.log "connections:", connections
+		console.log "connections result:", connections.length > 1
+		connections.length > 1
+
+@getTaskConnections = (task) ->
+	result = []
+	if task.nextPos?
+		for nextPos in task.nextPos
+			result.push {sourceId: task._id, destinationId: Tasks.findOne({pos: nextPos})._id}
+	#console.log "result:", result
+	return result
 
 Template.drawFlow.onRendered ->
 	this.autorun ->
@@ -133,34 +169,19 @@ Template.drawFlow.onRendered ->
 			jsPlumb.setSuspendDrawing(false, true)
 
 connectNonRecursive = (tasks, task) ->
+	stubLevel = 0
 	if task.type == "end"
 		return
 	if task.decisions?
-		i = 0
-		for decision in task.decisions
-			for nextPos in decision.nextPos
-				decisionTask = _.findWhere(tasks, {pos: nextPos})
-				connect "decision-#{decision.id}", decisionTask._id, decisionTask.type == "end", fromDecision=true, stubLevel=i++
-	else
-		for nextPos in task.nextPos
-			nextTask = _.findWhere(tasks, {pos: nextPos})
-			connect "connection-from-#{task._id}-to-#{nextTask._id}", nextTask._id, nextTask.type=="end", fromDecision=false
 
-connectRecursive = (tasks, task) ->
-	if task.type == "end"
-		return
-	if task.decisions?
-		i = 0
 		for decision in task.decisions
 			for nextPos in decision.nextPos
 				decisionTask = _.findWhere(tasks, {pos: nextPos})
-				connect "decision-#{decision.id}", decisionTask._id, decisionTask.type == "end", fromDecision=true, stubLevel=i++
-				connectRecursive tasks, decisionTask
+				connect "task_#{task._id}_decision_#{decision.id}", decisionTask._id, decisionTask.type == "end", fromDecision=true, stubLevel=stubLevel++
 	else
 		for nextPos in task.nextPos
 			nextTask = _.findWhere(tasks, {pos: nextPos})
-			connect "connection-from-#{task._id}-to-#{nextTask._id}", nextTask._id, nextTask.type=="end", fromDecision=false
-			connectRecursive tasks, nextTask
+			connect "connection-from-#{task._id}-to-#{nextTask._id}", nextTask._id, nextTask.type=="end", fromDecision=false, stubLevel=stubLevel++
 
 connect = (id1, id2, end, fromDecision, stubLevel) ->
 	anchors = []
@@ -170,11 +191,11 @@ connect = (id1, id2, end, fromDecision, stubLevel) ->
 		anchors.push "Bottom"
 	anchors.push "Top"
 
-	#console.log "connecting '#{id1}' to '#{id2}'"
+	console.log "connecting '#{id1}' to '#{id2}'"
 	jsPlumb.connect {
 		source:"#{id1}",
 		target:"#{id2}",
-		endpoint:["Dot", {radius: 3}], connector:[ "Flowchart", {alwaysRespectStubs:true, midpoint:0.85, stub:10 + stubLevel*5, cornerRadius:2 } ],
+		endpoint:["Dot", {radius: 3}], connector:[ "Flowchart", {alwaysRespectStubs:true, midpoint: (0.5 + stubLevel * 0.1), stub:5 + stubLevel*5, cornerRadius:2 } ],
 		anchors: anchors,
 		paintStyle:{ strokeStyle:"black", lineWidth:1 }
 	}
@@ -205,9 +226,9 @@ initJsPlumb = (tasks)->
 		;
 	instance.bind 'beforeDrop', (connection) ->
 		#console.log "connection:", connection
-		re = new RegExp("^new_connection_for_task_(.+)_with_decision_(.+)$","g");
+		re = new RegExp("^task_(.+)_decision_(.+)$","g");
 		result = re.exec(connection.sourceId)
-		#console.log "result:", result
+		console.log "RegExp result:", result
 		if result
 			#console.log "connection for decision, taskId:#{result[1]}, decisionId:#{result[2]}, targetId:#{connection.targetId}"
 			Meteor.call "makeDecisionConnection", { taskId: result[1], decisionId: result[2], targetId: connection.targetId }, (error, result) ->
@@ -260,11 +281,11 @@ initJsPlumb = (tasks)->
 
 		if task.decisions?
 			for decision in task.decisions
-				test = $("#new_connection_for_task_#{task._id}_with_decision_#{decision.id}").length
+				test = $("#task_#{task._id}_decision_#{decision.id}").length
 				if not test
 					continue
 				else
-					instance.makeSource("new_connection_for_task_#{task._id}_with_decision_#{decision.id}", { anchor: [0.6, 1, 0, 1] }, newConnectionEndpoint)
+					instance.makeSource("task_#{task._id}_decision_#{decision.id}", { anchor: [0.6, 1, 0, 1] }, newConnectionEndpoint)
 		else
 			test = $("#new-connection-from-#{task._id}").length
 			if not test

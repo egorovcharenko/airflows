@@ -16,7 +16,7 @@
   {
     "accountId": "demoAccount",
     "id": "demoFlow",
-    "prettyName": "Демонстрационный процесс",
+    "prettyName": "Демо процесс",
     "description": "Пример того, что умеет AirFlows",
     "entityName": "demoEntity"
   }
