@@ -5,8 +5,6 @@
       "host": "airflo.ws",
       "username": "root",
       "password": "likebesharP1"
-      // or pem file (ssh based authentication)
-      //"pem": "~/.ssh/id_rsa"
     }
   ],
 

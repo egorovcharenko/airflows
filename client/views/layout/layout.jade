@@ -1,6 +1,7 @@
 
 head
   meta(name="viewport" content="width=device-width, initial-scale=1")
+  link(rel="icon" sizes="16x16 32x32" href="/favicon.ico?v=2")
   title
     | AirFlows
 
@@ -18,7 +19,9 @@ template(name="layout")
           h5.white-text 
           ul
             li 
-              span.grey-text.text-lighten-4 О сервисе
+              h5.grey-text.text-lighten-4 О сервисе
+            li
+              span.grey-text.text-lighten-4 AirFlows - самая простая система для управления бизнес-процессами. Занимайтесь тем, что приносит пользу клиентам - а не тушением пожаров.
         .col.l4.offset-l2.s12
           h5.white-text
     .footer-copyright
@@ -30,7 +33,9 @@ template(name="PublicLayout")
   header(id="wrap")
     nav.teal.darken-4
       .nav-wrapper.container.teal.darken-4
-        a.brand-logo(href="#!") AirFlows
+        a.brand-logo(href="{{pathFor 'home_public'}}") 
+          span AirFlows
+          span.beta-title beta
         a.button-collapse(href="#" data-activates="mobile-demo")
           i.material-icons Меню
         ul.right.hide-on-med-and-down
@@ -53,7 +58,9 @@ template(name="PrivateLayout")
   header(id="wrap")
     nav.teal.darken-4
       .nav-wrapper.container.teal.darken-4
-        a.brand-logo(href="#!") AirFlows
+        a.brand-logo(href="{{pathFor 'tasks'}}")
+          span AirFlows
+          span.beta-title beta
         a.button-collapse(href="#" data-activates="mobile-demo")
           i.material-icons Меню
         ul.right.hide-on-med-and-down

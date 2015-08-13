@@ -2,6 +2,37 @@ $accent-color-1: #ff3d00
 $accent-text-color-1: white
 $primary-color-dark: #009688
 
+.land_pricing_text
+  text-align:left
+  font-size: 90%
+
+.land_price_wrapper
+  padding: 20px
+
+.land-hero-flow
+  width: 100%
+  max-width: 1198px
+
+.land-hero-execute
+  width: 100%
+  max-width: 656px
+
+.land_price_span
+  color: #00695c
+  font-size: 400%
+
+.land_icon
+  width: 128px
+
+.land_try_button
+  margin: 10px
+
+.land_dark_section
+  background-color: #e0f2f1
+
+.benefit-col
+  min-height: 270px
+
 .remove-decision-button, .remove-decision-button i
   position: absolute
   top: -10px
@@ -14,6 +45,12 @@ $primary-color-dark: #009688
 .task-td
   position: relative
 
+.task-td .add-task-button-generic
+  display: none
+
+.task-td:hover .add-task-button-generic
+  display: block
+
 .task-td .card
   overflow: visible
   padding-top: 10px
@@ -24,6 +61,8 @@ $primary-color-dark: #009688
   width: 20px
   height: 20px
   z-index: 100
+  padding: 0px
+  margin: 0px
 
 .add-task-to-the-left
   @extend .add-task-button
@@ -49,6 +88,13 @@ $primary-color-dark: #009688
   margin-right:auto
   top: -10px
 
+.beta-title
+  font-size: 40%
+  font-style: italic
+
+.editing-td
+  background-color: #009688
+
 .add-task-to-the-right
   @extend .add-task-button
   right: -10px
@@ -57,15 +103,14 @@ $primary-color-dark: #009688
   margin-top: auto
   margin-bottom: auto
 
-.add-task-to-the-right i, .add-task-to-the-left i, .add-task-before i
+.add-task-to-the-right i, .add-task-to-the-left i, .add-task-before i, .add-task-after i
   top: 8px
+  left: 0px
   position: absolute
   font-size: 12pt
   line-height: 4pt
-
-.add-task-after i
-  font-size: 12pt
-  line-height: 1pt
+  padding: 0px
+  margin: 0px
 
 .home-hero-row
   margin-top: 50px
@@ -117,6 +162,7 @@ $primary-color-dark: #009688
   padding-left: 10px
   padding-right: 10px
   padding-bottom: 0px
+  margin: 0px
   position: relative
 
 .add-task-before-row

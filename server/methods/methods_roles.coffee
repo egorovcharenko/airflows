@@ -12,7 +12,7 @@ Meteor.methods
   "addNewUserToRole": (data) ->
     accountId = Meteor.user().profile.accountId
     if Roles.find({_id: data.roleId, 'users.id': data.newUserId}).count() > 0
-      throw new Meteor.Error 500, "Пользователь уже добавлен к роли"
+      throw new Meteor.Error 500, "Сотрудник уже добавлен к роли"
     else
       Roles.update({_id: data.roleId, accountId: accountId}, {$push: {users: {id: data.newUserId}}})
 

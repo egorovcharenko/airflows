@@ -16,7 +16,6 @@ var publicRoutes = [
 ];
 
 var privateRoutes = [
-	"home_private",
 	"user_settings",
 	"user_settings.profile",
 	"user_settings.change_pass",
@@ -124,7 +123,7 @@ Router.ensureLogged = function() {
 		// user is logged in - check role
 		if(!routeGranted(this.route.getName())) {
 			// user is not in allowedRoles - redirect to first granted route
-			var redirectRoute = firstGrantedRoute("home_private");
+			var redirectRoute = firstGrantedRoute("tasks");
 			this.redirect(redirectRoute);
 		} else {
 			this.next();
@@ -136,9 +135,8 @@ Router.ensureNotLogged = function() {
 	if(Meteor.userId() && (!Meteor.user() || !Meteor.user().roles)) {
 		return;
 	}
-
 	if(Meteor.userId()) {
-		var redirectRoute = firstGrantedRoute("home_private");
+		var redirectRoute = firstGrantedRoute("tasks");
 		this.redirect(redirectRoute);
 	}
 	else {
@@ -184,7 +182,6 @@ Router.map(function () {
 	this.route("registerInvite", {path: "/register/invite/:token", controller: "RegisterInviteController"});
 	this.route("forgot_password", {path: "/forgot_password", controller: "ForgotPasswordController"});
 	this.route("reset_password", {path: "/reset_password/:resetPasswordToken", controller: "ResetPasswordController"});
-	this.route("home_private", {path: "/home_private", controller: "HomePrivateController"});
 	this.route("user_settings", {path: "/user_settings", controller: "UserSettingsController"});
 	this.route("user_settings.profile", {path: "/user_settings/profile", controller: "UserSettingsProfileController"});
 	this.route("user_settings.change_pass", {path: "/user_settings/change_pass", controller: "UserSettingsChangePassController"});

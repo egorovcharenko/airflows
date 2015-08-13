@@ -37,7 +37,7 @@ Template.singleRole.events
         console.log "error", error
         Materialize.toast error.reason, 4000
       if result
-        Materialize.toast "Человек отвязан от роли", 4000
+        Materialize.toast "Сотрудник отвязан от роли", 4000
 
 Template.singleRole.helpers
   usernameFor: (id)->

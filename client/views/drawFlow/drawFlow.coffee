@@ -23,6 +23,7 @@ Template.drawFlow.events
 				console.log "success"
 	'click #add-task-after': (event, template) ->
     # добавить новую задачу
+		console.log "Template.parentData():", Template.parentData()
 		Meteor.call "addTaskAfter", this.task, (error, result) ->
 			if error
 				console.log "error", error
@@ -143,6 +144,8 @@ Template.drawFlow.helpers
 		console.log "connections:", connections
 		console.log "connections result:", connections.length > 1
 		connections.length > 1
+	editMode: ->
+		this.task.editMode
 
 @getTaskConnections = (task) ->
 	result = []
@@ -225,7 +228,7 @@ initJsPlumb = (tasks)->
 	instance.bind 'connection', (info, originalEvent) ->
 		;
 	instance.bind 'beforeDrop', (connection) ->
-		#console.log "connection:", connection
+		console.log "connection:", connection
 		re = new RegExp("^task_(.+)_decision_(.+)$","g");
 		result = re.exec(connection.sourceId)
 		console.log "RegExp result:", result
@@ -237,12 +240,14 @@ initJsPlumb = (tasks)->
 				if result
 					console.log "connection successful", result
 		else
-			#console.log "connection from #{info.sourceId} to #{info.targetId}"
-			Meteor.call "makeTaskConnection", connection.sourceId, connection.targetId, (error, result) ->
-				if error
-					console.log "error", error
-				if result
-					console.log "connection successful", result
+			if connection.sourceId != connection.targetId
+				Meteor.call "makeTaskConnection", connection.sourceId, connection.targetId, (error, result) ->
+					if error
+						Materialize.toast error.reason, 4000
+					if result
+						console.log "connection successful", result
+			else
+				Materialize.toast "Невозможно связать задачу с самой себя", 4000
 		return false
 
   instance.bind 'connectionDetached', (info, originalEvent) ->

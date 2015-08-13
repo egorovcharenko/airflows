@@ -3,6 +3,10 @@
     .col.s12
       #page_menu.pull-right
   .row
-    each this
-      .col.s6
-        +singleFlowIns
+    if hasNoTasks
+      .col.s12.center-align
+        p Все задачи выполнены, так держать!
+    else
+      each this
+        .col.s12.m12.l6
+          +singleFlowIns

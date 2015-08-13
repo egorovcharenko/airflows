@@ -87,7 +87,7 @@ Meteor.methods
       newNextPos.push newTask.pos
 
       newTask.nextPos.push nextPos
-      Tasks.update ({_id: task._id}, {$set: {nextPos: []}})
+      #Tasks.update ({_id: task._id}, {$set: {nextPos: []}})
     else
       newTask.nextPos = task.nextPos
     newTaskId = Tasks.insert newTask
@@ -161,6 +161,8 @@ Meteor.methods
   "makeTaskConnection": (sourceId, targetId) ->
     sourceId = sourceId.replace("new-connection-from-", "")
     console.log "makeTaskConnection started, sId:#{sourceId}, tId:#{targetId}"
+    if sourceId == targetId
+      throw new Meteor.Error 500, "Невозможно связать задачу саму с собой"
     sourceTask = Tasks.findOne({_id: sourceId})
     targetTask = Tasks.findOne({_id: targetId})
     hasLoops = willHaveLoops(Tasks.find({flowId: sourceTask.flowId}).fetch(), {sourcePos: sourceTask.pos, targetPos: targetTask.pos})

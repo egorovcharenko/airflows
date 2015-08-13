@@ -14,7 +14,7 @@ tr
           a#detach_user_from_role.waves-effect.waves-light.btn(data-role-id = "#{../_id}") Удалить
     .input-field.col.s8.role-selector
       select.role-selector
-        option.role-selector(value="0000",disabled,selected) Добавьте человека на роль
+        option.role-selector(value="0000",disabled,selected) Добавьте сотрудника к роли
         each ../users
           option.role-selector(value='#{_id}') #{profile.name}
     .col.s4
