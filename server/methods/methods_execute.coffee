@@ -3,15 +3,15 @@ Meteor.methods
     flowIns = FlowsIns.findOne({_id: dataObject.flowInsId})
     if not flowIns?
       throw new Meteor.Error(500, "Не найден экземпляр процесса")
-    # изменить статус задаче
-    TasksIns.update({_id: dataObject._id}, {$set: {state: "completed"}})
+    # транзакция
+    tx.start("completeTask");
     # найти следующую задачу
     for nextPos in dataObject.nextPos
       nextTask = TasksIns.findOne({flowInsId: dataObject.flowInsId, pos: nextPos})
       if not nextTask?
         throw new Meteor.Error(500, "Не найдена следующая задача")
       # изменить ей статус и указатель на предыдущую задачу
-      TasksIns.update({_id: nextTask._id}, {$set: {state: "current", prevPos: dataObject.pos}})
+      TasksIns.update({_id: nextTask._id}, {$set: {state: "current", prevPos: dataObject.pos}}, {tx: true})
       # изменить статус и проставить поля сущности, если она есть
       entIns = EntitiesIns.findOne({parentFlowId: flowIns._id})
       if entIns?
@@ -19,13 +19,13 @@ Meteor.methods
         newState = dataObject.stateAfterThisTask
         console.log "newState:", newState
         if newState? and newState != ""
-          EntitiesIns.update({_id: entIns._id}, {$set: {state: newState}})
+          EntitiesIns.update({_id: entIns._id}, {$set: {state: newState}}, {tx: true})
         # изменить другие поля, если они есть
         if dataObject.setFields?
           for field in dataObject.setFields
             $set = {};
             $set[field.name] = field.value;
-            EntitiesIns.update({_id: entIns._id}, { $set: $set });
+            EntitiesIns.update({_id: entIns._id}, { $set: $set }, {tx: true});
 
       # если это встроенный подпроцесс ..
       if nextTask.type == "embeddedFlow"
@@ -37,15 +37,18 @@ Meteor.methods
         flow.parentTaskInsId = nextTask._id
         embeddedFlowId = Meteor.call "runFlow", flow
         # записать в текущую задачу id дочернего процесса
-        TasksIns.update({_id: nextTask._id}, {$set: {embeddedFlowId: embeddedFlowId}})
+        TasksIns.update({_id: nextTask._id}, {$set: {embeddedFlowId: embeddedFlowId}}, {tx: true})
       # если это и так последняя задача - завершить процесс целиком
       if nextTask.type == "end"
-        FlowsIns.update({_id: flowIns._id}, {$set:{state: "finished"}})
+        FlowsIns.update({_id: flowIns._id}, {$set:{state: "finished"}}, {tx: true})
         # если это дочерний вложенный процесс - то завершить родительскую задачу
         if flowIns.parentTaskInsId?
           Meteor.call "completeTask", TasksIns.findOne({_id: flowIns.parentTaskInsId}), (error, result) ->
             if error
               console.log "error:", error
+    # изменить статус задаче
+    TasksIns.update({_id: dataObject._id}, {$set: {state: "completed"}}, {tx: true})
+    tx.commit();
 
   "stepBack": (dataObject) ->
     console.log "stepBack started, data:", dataObject

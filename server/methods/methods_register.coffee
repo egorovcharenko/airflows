@@ -36,19 +36,30 @@ Meteor.methods
     console.log Invitations.insert invitation
 
     # отправить емейл
-    console.log Mandrill.messages.sendTemplate
-      template_name: "airflows-invitation"
-      template_content: [
+    this.unblock()
+    try
+      result = Mandrill.messages.sendTemplate
+        template_name: "airflows-invitation"
+        template_content: [
           {
-            name: "token"
+            name: 'token'
             content: invitation.token
           }
         ]
-      message:
-        to: [email: data.inviteEmail]
-    return true
+        message:
+          to: [email: data.inviteEmail]
+          global_merge_vars: [
+            {
+              name: 'token'
+              content: invitation.token
+            }
+          ]
+      console.log "result:", result
+      return true
+    catch e
+      console.log "error:", e
 
-  "createUserWithInvitation": (date) ->
+  "createUserWithInvitation": (data) ->
     console.log "createUserWithInvitation started, data:", data
     # проверить, не использован ли токен
     token = Invitations.findOne({token: data.token})

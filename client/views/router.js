@@ -13,6 +13,7 @@ var publicRoutes = [
 	"forgot_password",
 	"reset_password",
 	"registerInvite"
+
 ];
 
 var privateRoutes = [
@@ -27,6 +28,7 @@ var privateRoutes = [
 	"entitiesTable",
 	"drawFlow",
 	"accountRoles"
+	"registerInvite"
 ];
 
 var freeRoutes = [
