@@ -11,6 +11,12 @@ Meteor.publishComposite 'allFlowGroups', ->
       {
         find: (group) ->
           Flows.find({groupId: group._id})
+        children: [
+          {
+            find: (flow) ->
+              Entities.find({name: flow.entityName})
+          }
+        ]
       }
     ]
   }

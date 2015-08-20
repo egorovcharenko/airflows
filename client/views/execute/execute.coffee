@@ -1,6 +1,15 @@
-Template.execute.events
+Template.executeSingleFlow.events
 	'click #run-flow': (event, template) ->
 		dataObject = this
+		# добавить значения полей
+		dataObject.fields = []
+		allFields = template.findAll("input.enter-data-field")
+		for field in allFields
+			dataObject.fields.push({
+				name: field.dataset.fieldName,
+				value: field.value
+				})
+		#console.log "dataObject.fields:", dataObject.fields
 		Meteor.call "runFlow", dataObject, (error, result) ->
 			if error
 				console.log "error", error
@@ -23,6 +32,17 @@ Template.execute.events
 					Router.go('drawFlow', {flowId: result.flowId})
 				else
 					Materialize.toast('Ошибка при создании процесса: не вернулся результат', 4000)
+
+Template.executeSingleFlow.helpers
+	dataFields: ->
+		# находим сущность
+		entity = Entities.findOne({name: this.entityName})
+		# возвращаем ее поля
+		if entity?
+			if entity.fields?
+				return entity.fields
+		return null
+		#console.log "this:", this
 
 Template.execute.onRendered ->
   $(document).ready ->

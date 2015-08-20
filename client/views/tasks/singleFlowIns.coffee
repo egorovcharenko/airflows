@@ -62,6 +62,14 @@ Template.singleFlowIns.helpers
 Template.singleFlowIns.events
 	"click #task-completed": (event, template) ->
 		dataObject = this
+		dataObject.fields = []
+		allFields = template.findAll("input.edit-data-field")
+		for field in allFields
+			dataObject.fields.push({
+				name: field.dataset.fieldName,
+				value: field.value
+				})
+		#console.log "dataObject.fields:", dataObject.fields
 		Meteor.call "completeTask", dataObject, (error, result) ->
 			if error
 				console.log "error", error

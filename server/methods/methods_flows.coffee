@@ -39,7 +39,7 @@ Meteor.methods
       entIns.accountId = accountId
       entIns.parentFlowId = flowInsId
       entIns.type = ent.name
-      entIns.fields = ent.fields
+      entIns.fields = dataObject.fields
       # установить статус сущности
       entIns.state = startTask.stateAfterThisTask
       EntitiesIns.insert(entIns)
