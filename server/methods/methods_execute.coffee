@@ -5,6 +5,8 @@ Meteor.methods
       throw new Meteor.Error(500, "Не найден экземпляр процесса")
     # транзакция
     tx.start("completeTask");
+    # изменить статус задаче
+    TasksIns.update({_id: dataObject._id}, {$set: {state: "completed"}}, {tx: true})
     # найти следующую задачу
     for nextPos in dataObject.nextPos
       nextTask = TasksIns.findOne({flowInsId: dataObject.flowInsId, pos: nextPos})
@@ -46,8 +48,6 @@ Meteor.methods
           Meteor.call "completeTask", TasksIns.findOne({_id: flowIns.parentTaskInsId}), (error, result) ->
             if error
               console.log "error:", error
-    # изменить статус задаче
-    TasksIns.update({_id: dataObject._id}, {$set: {state: "completed"}}, {tx: true})
     tx.commit();
 
   "stepBack": (dataObject) ->
@@ -77,3 +77,8 @@ Meteor.methods
       Meteor.call "stepBack", TasksIns.findOne({_id: flowIns.parentTaskInsId}), (error, result) ->
         if error
           console.log "error", error
+
+  "updateEntityInsDataField": (dataObject) ->
+    console.log "updateEntityInsDataField started, dataObject:", dataObject
+    #flowIns = FlowsIns.findOne({_id: dataObject.flowInsId})
+    EntitiesIns.update({parentFlowId: dataObject.flowInsId, 'fields.name': dataObject.fieldName}, {$set: {'fields.$.value': dataObject.newValue}})

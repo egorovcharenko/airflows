@@ -2,6 +2,21 @@
   #title_row.row
     .col.s12
       #page_menu.pull-right
+  .row#data-container
+    .col.s12
+      each this.dataFields
+        .row
+          .col.s10
+            p {{name}}
+          .col.s2
+            a.waves-effect.waves-light.btn.remove-data-field-button Удалить
+      .row
+        .col.s10
+          .input-field.col.s12
+            input.validate(id="add-data-field" type="text")
+            label(for="add-data-field") Добавить новое поле данных
+        .col.s2
+          a.waves-effect.waves-light.btn.add-data-field-button Добавить
   .row#links-container
     table
       tbody

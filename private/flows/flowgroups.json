@@ -1,0 +1,14 @@
+[
+  {
+    "accountId": "allshellac",
+    "_id": "newGroup",
+    "name": "Группа 1",
+    "sortOrder": "1"
+  },
+  {
+    "accountId": "allshellac",
+    "_id": "newGroup2",
+    "name": "Группа 2",
+    "sortOrder": "2"
+  }
+]

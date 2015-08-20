@@ -109,12 +109,21 @@
 
     #console.log "final rows:", rows
 
+    # поля с данными
+    entity = Entities.findOne({name: flow.entityName})
+    console.log "flow.entityName:", flow.entityName
+    if entity?
+      dataFields = entity.fields
+
+    console.log "dataFields:", dataFields
     data = {}
+    data.dataFields = dataFields
     data.roles = returnedRoles
     data.params = params
     data.startTask = startTask
     data.rows = rows
     data.tasks = tasks
+    data.flow = flow
     return data
 )
 resetPassed = (tasks) ->

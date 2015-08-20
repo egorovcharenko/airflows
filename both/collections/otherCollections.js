@@ -4,6 +4,7 @@ this.Roles = new Mongo.Collection("accountRoles");
 this.AccountsColl = new Mongo.Collection("accounts");
 this.Invitations = new Mongo.Collection("invitations");
 this.EntitiesIns = new Mongo.Collection("entitiesIns");
+this.FlowGroups = new Mongo.Collection("flowGroups");
 
 this.EntitiesIns.before.insert(function(userId, doc) {
 	doc.createdAt = new Date();

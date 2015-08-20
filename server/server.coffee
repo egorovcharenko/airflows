@@ -27,6 +27,7 @@ Meteor.startup ->
   initialDataLoad 'entities', @Entities
   initialDataLoad 'flows', @Flows
   initialDataLoad 'roles', @Roles
+  initialDataLoad 'flowgroups', @FlowGroups
   testEmail = "egor@gmail.com"
   testUser = Meteor.users.findOne({'profile.email': testEmail})
   if not testUser

@@ -2,7 +2,7 @@ this.App = {};
 this.Helpers = {};
 
 Meteor.startup(function() {
-	
+
 });
 
 App.logout = function() {
@@ -108,4 +108,3 @@ Helpers.integerToTrueFalse = function(i) {
 _.each(Helpers, function (helper, key) {
 	Handlebars.registerHelper(key, helper);
 });
-

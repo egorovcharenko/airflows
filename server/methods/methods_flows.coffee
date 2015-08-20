@@ -33,12 +33,13 @@ Meteor.methods
     if dataObject.entityName?
       ent = Entities.findOne({name: dataObject.entityName, accountId: accountId})
       if not ent?
-        throw new Meteor.Error(500, "Entity not found, aboring")
+        throw new Meteor.Error(500, "Сущность не найдена")
       entIns = {}
       entIns.entId = ent._id
       entIns.accountId = accountId
       entIns.parentFlowId = flowInsId
       entIns.type = ent.name
+      entIns.fields = ent.fields
       # установить статус сущности
       entIns.state = startTask.stateAfterThisTask
       EntitiesIns.insert(entIns)
@@ -52,7 +53,8 @@ Meteor.methods
       prettyName: dataObject.flowName,
       description: dataObject.flowDesc,
       id: uuid.v4(),
-      accountId: accountId
+      accountId: accountId,
+      entityName: dataObject.flowName
     }
     newFlowId = Flows.insert newFlow
     # добавить начало и конец
@@ -72,5 +74,11 @@ Meteor.methods
     }
     Tasks.insert newStart
     Tasks.insert newEnd
+    # добавить новую сущность
+    newEntity = {}
+    newEntity.accountId = accountId
+    newEntity.name = newFlow.prettyName
+    Entities.insert newEntity
+
     console.log "newFlowId:", newFlowId
     result = {flowId: newFlowId}

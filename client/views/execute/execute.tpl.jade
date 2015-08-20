@@ -5,28 +5,36 @@
   .row
     each this
       .col.s4
-        .card.flow-card.teal
-          .card-content
-            .card-title
-                h5.panel-title
-                  span.white-text #{prettyName}
-                p.teal-text.text-lighten-5.flow-text #{description}
-          .card-action.teal.lighten-4
-            a#run-flow.btn.waves-effect.waves-light.deep-orange.accent-3
-              .white-text Запуск
-            a#edit-flow-button.btn.waves-effect.waves-light.teal.darken-1.right
-              .white-text Изм.
-    .col.s4.clearfix
-      .card.flow-card.teal
-        .card-content.white-text
-          h5.card-title Создать процесс
-          .row.white-text
-            .input-field.col.s12.white-text
-              input.validate.white-text(id="newFlowName" type="text")
-              label.white-text(for="newFlowName") Название
-            .input-field.col.s12.white-text
-              textarea.materialize-textarea.white-text(id="textarea_desc")
-              label.white-text(for="textarea_desc") Описание
-        .card-action.teal.lighten-4
-          a#add-new-flow.btn.waves-effect.waves-light.deep-orange.accent-3
-            .white-text Создать
+        p {{name}}
+        ul.collapsible.popout(data-collapsible="accordion")
+          each flows
+            li
+              .collapsible-header
+                p #{prettyName}
+              .collapsible-body
+                .card.flow-card.teal
+                  .card-content
+                    .card-title
+                        h5.panel-title
+                          span.white-text #{prettyName}
+                        p.teal-text.text-lighten-5.flow-text #{description}
+                  .card-action.teal.lighten-4
+                    a#run-flow.btn.waves-effect.waves-light.deep-orange.accent-3
+                      .white-text Запуск
+                    a#edit-flow-button.btn.waves-effect.waves-light.teal.darken-1.right
+                      .white-text Изм.
+          li
+            .collapsible-header
+              i.medium.mdi-action-note-add
+              p Создать процесс
+            .collapsible-body
+              .flow-card  
+                .row.white-text
+                  .input-field.col.s12.white-text
+                    input.validate.white-text(id="newFlowName" type="text")
+                    label.white-text(for="newFlowName") Название
+                  .input-field.col.s12.white-text
+                    textarea.materialize-textarea.white-text(id="textarea_desc")
+                    label.white-text(for="textarea_desc") Описание
+                a#add-new-flow.btn.waves-effect.waves-light.deep-orange.accent-3
+                  .white-text Создать

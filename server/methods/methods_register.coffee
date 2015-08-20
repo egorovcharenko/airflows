@@ -62,7 +62,7 @@ Meteor.methods
   "createUserWithInvitation": (data) ->
     console.log "createUserWithInvitation started, data:", data
     # проверить, не использован ли токен
-    token = Invitations.findOne({token: data.token})
+    token = Invitations.findOne({token: data.inviteToken})
     if not token?
       throw new Meteor.Error 500, "Не найдено приглашение. Если вы уже использовали приглашение, попробуйте запросить его еще раз."
     # создать юзера, привязав к аккаунту
@@ -72,5 +72,5 @@ Meteor.methods
       profile: { name: data.profile.name, accountId: token.accountId}
     }
     # удалить токен
-    Invitations.remove({token: data.token})
+    Invitations.remove({token: data.inviteToken})
     return true

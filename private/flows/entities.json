@@ -1,18 +1,15 @@
 [
   {
     "accountId": "allshellac",
-    "name": "incomingCall",
-    "prettyName": "Входящий звонок",
-    "fieldsToShow": [
+    "name": "Входящий звонок",
+    "fields": [
       {
-        "name": "reason",
-        "prettyName": "Причина звонка"
+        "name": "Причина звонка"
       }
     ]
   },
   {
     "accountId": "allshellac",
-    "name": "order",
-    "prettyName": "Заказ"
+    "name": "Заказ"
   }
 ]

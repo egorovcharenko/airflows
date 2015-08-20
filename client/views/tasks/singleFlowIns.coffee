@@ -54,6 +54,10 @@ Template.singleFlowIns.helpers
 			false
 	logDataContext: ->
 		console.log "logDataContext:", this
+	dataFields: ->
+		entIns = EntitiesIns.findOne({parentFlowId: @_id})
+		#console.log "entIns:", entIns, ", this:", this
+		return entIns.fields
 
 Template.singleFlowIns.events
 	"click #task-completed": (event, template) ->
@@ -83,3 +87,13 @@ Template.singleFlowIns.events
 		Meteor.call "cancelFlowIns", dataObject, (error, result) ->
 			if error
 				console.log "error", error
+
+Template.singleFlowInsDataField.events
+	"click .save-data-field-button": (event, template) ->
+		newValue = template.find("input.edit-data-field").value
+		console.log "newValue:", newValue
+		Meteor.call "updateEntityInsDataField", {flowInsId: Template.parentData(1)._id, fieldName: @name, newValue: newValue}, (error, result) ->
+			if error
+				Materialize.toast error.reason, 4000
+			else
+				Materialize.toast "Сохранено", 4000

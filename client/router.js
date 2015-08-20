@@ -28,7 +28,6 @@ var privateRoutes = [
 	"entitiesTable",
 	"drawFlow",
 	"accountRoles"
-	"registerInvite"
 ];
 
 var freeRoutes = [

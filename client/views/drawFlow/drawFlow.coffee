@@ -85,6 +85,26 @@ Template.drawFlow.events
 				console.log "error", error
 			if result
 				console.log "success"
+	'click .add-data-field-button' :(event, template) ->
+		newFieldName = template.find("input#add-data-field").value
+		if newFieldName == ''
+			Materialize.toast "Название поля не может быть пустым", 4000
+			return
+		console.log ".add-data-field-button, newFieldName:#{newFieldName}, this:", this
+		Meteor.call "addDataField", {fieldName: newFieldName, entityName: this.flow.entityName}, (error, result) ->
+			if error
+				Materialize.toast error.reason, 4000
+			if result
+				console.log "success"
+				template.find("input#add-data-field").value = ""
+	'click .remove-data-field-button' :(event, template) ->
+		console.log ".remove-data-field-button, this:", this
+		Meteor.call "removeDataField", {fieldName: this.name, entityName:  Template.parentData().flow.entityName}, (error, result) ->
+			if error
+				Materialize.toast error.reason, 4000
+			if result
+				console.log "success"
+				template.find("input#add-data-field").value = ""
 
 Template.drawFlow.helpers
 	allRoles: ->

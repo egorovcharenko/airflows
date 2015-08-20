@@ -2,15 +2,32 @@ Meteor.publish "allFlows", (args) ->
   currentUser = Meteor.users.findOne({_id: this.userId})
   Flows.find({accountId: currentUser.profile.accountId})
 
+Meteor.publishComposite 'allFlowGroups', ->
+  {
+    find: ->
+      currentUser = Meteor.users.findOne({_id: this.userId})
+      FlowGroups.find({accountId: currentUser.profile.accountId})
+    children: [
+      {
+        find: (group) ->
+          Flows.find({groupId: group._id})
+      }
+    ]
+  }
+
 Meteor.publishComposite 'runningTasks', (userId, limit) ->
   {
     find: ->
       currentUser = Meteor.users.findOne({_id: this.userId})
-      FlowsIns.find { state: "running", accountId: currentUser.profile.accountId}
+      FlowsIns.find({ state: "running", accountId: currentUser.profile.accountId})
     children: [
       {
         find: (flow) ->
           TasksIns.find({flowInsId: flow._id})
+      },
+      {
+        find: (flowIns) ->
+          EntitiesIns.find({parentFlowId: flowIns._id})
       }
     ]
   }
@@ -75,6 +92,11 @@ Meteor.publishComposite 'flow', (flowId) ->
           tasks = Tasks.find({flowId: flow.id})
           #console.log "tasks.count:", tasks.count()
           return tasks
+      },
+      {
+        find: (flow) ->
+          entities = Entities.find({name: flow.entityName})
+          return entities
       }
     ]
   }

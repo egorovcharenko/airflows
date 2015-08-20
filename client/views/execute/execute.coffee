@@ -23,3 +23,8 @@ Template.execute.events
 					Router.go('drawFlow', {flowId: result.flowId})
 				else
 					Materialize.toast('Ошибка при создании процесса: не вернулся результат', 4000)
+
+Template.execute.onRendered ->
+  $(document).ready ->
+    $('.collapsible').collapsible
+      accordion : false # A setting that changes the collapsible behavior to expandable instead of the default accordion style

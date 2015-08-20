@@ -4,20 +4,23 @@
     "id": "incomingCall",
     "prettyName": "Входящий звонок",
     "description": "Клиент звонит",
-    "entityName": "incomingCall"
+    "entityName": "Входящий звонок",
+    "groupId": "newGroup"
   },
   {
     "accountId": "allshellac",
     "id": "takeOrderByPhone",
     "prettyName": "Обработать заказ",
     "description": "Поступил новый заказ",
-    "entityName": "order"
+    "entityName": "Заказ",
+    "groupId": "newGroup"
   },
   {
     "accountId": "demoAccount",
     "id": "demoFlow",
     "prettyName": "Демо процесс",
     "description": "Пример того, что умеет AirFlows",
-    "entityName": "demoEntity"
+    "entityName": "demoEntity",
+    "groupId": "newGroup2"
   }
 ]

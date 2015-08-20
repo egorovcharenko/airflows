@@ -4,6 +4,8 @@ if hasCurrentTasks
       .card-title.panel-title.black-text 
         p #{logDataContext}
         p #{name}
+      each dataFields
+        +singleFlowInsDataField
       each subTasks
         if showTask
           div(class="card {{#if isPreend}}teal{{else}}{{#if isTaskNotCurrent}}{{#if isTaskCompleted}}teal{{else}}teal{{/if}}{{else}}teal{{/if}}{{/if}}")

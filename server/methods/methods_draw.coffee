@@ -221,6 +221,29 @@ Meteor.methods
     newPosArray.push newPos
     Tasks.update({_id: dataObject.taskId, "decisions.id": dataObject.decisionId}, {$set: {"decisions.$.nextPos": _.uniq(newPosArray)}})
 
+  "addDataField": (dataObject) ->
+    console.log "addDataField started, dataObject:", dataObject
+    # найти объект
+    entity = Entities.findOne({name: dataObject.entityName})
+    if not entity?
+      throw new Meteor.Error 500, "Не найден объект, к которому надо добавить поле"
+    # проверить что такое поле не существует
+    if _.findWhere(entity.fields, {name: dataObject.fieldName})?
+      throw new Meteor.Error 500, "Поле с таким названием уже найдено"
+    # добавить поле
+    newField = {
+      name: dataObject.fieldName
+    }
+    Entities.update({name: dataObject.entityName}, {$push: {fields: newField}})
+
+  "removeDataField": (dataObject) ->
+    console.log "removeDataField started, dataObject:", dataObject
+    # найти объект
+    entity = Entities.findOne({name: dataObject.entityName})
+    if not entity?
+      throw new Meteor.Error 500, "Не найден объект, у которого надо удалить поле"
+    # удалить поле
+    Entities.update({name: dataObject.entityName}, {$pull: {fields: {name: dataObject.fieldName}}})
 
 @willHaveLoops = (tasks, proposedConnection) ->
   # proposedConnection = {sourcePos: pos1, targetPos: pos2, sourceDecisionId: id1, targetDecisionPos: pos}

@@ -3,11 +3,16 @@
   loadingTemplate: 'loading'
   waitOn: ->
       [
-        Meteor.subscribe('allFlows')
+        Meteor.subscribe('allFlowGroups')
       ]
   onBeforeAction: ->
     @next()
     return
   data: ->
-    Flows.find()
+    result = {}
+    groups = FlowGroups.find({}).fetch()
+    for group in groups
+      group.flows = Flows.find({groupId: group._id}).fetch()
+    console.log "groups:", groups
+    return groups
 )
