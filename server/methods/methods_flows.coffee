@@ -46,7 +46,7 @@ Meteor.methods
     return flowInsId
 
   'addFlow': (dataObject) ->
-    console.log "addFlow started, dataObject:#{dataObject}"
+    console.log "addFlow started, dataObject:",dataObject
     accountId = Meteor.user().profile.accountId
     # добавить процесс
     newFlow = {
@@ -54,17 +54,19 @@ Meteor.methods
       description: dataObject.flowDesc,
       id: uuid.v4(),
       accountId: accountId,
-      entityName: dataObject.flowName
+      entityName: dataObject.flowName,
+      groupId: dataObject.groupId
     }
     newFlowId = Flows.insert newFlow
     # добавить начало и конец
     newStart = {
-      flowId: newFlow.id,
+      flowId: newFlow.id
       pos: "1",
-      type: "start",
+      type: "start"
       roleId: "unassigned"
-      nextPos:["999"],
+      nextPos:["999"]
       accountId: accountId
+      stateAfterThisTask: "В работе"
     }
     newEnd = {
       flowId: newFlow.id,
@@ -82,3 +84,12 @@ Meteor.methods
 
     console.log "newFlowId:", newFlowId
     result = {flowId: newFlowId}
+
+  'deleteFlow': (dataObject) ->
+    console.log "deleteFlow started, dataObject:",dataObject
+    # удалить процесс
+    Flows.update {_id: dataObject.flowId}, {$set: {deleted: true}}
+
+    # удалить связанны сущности
+    flow = Flows.findOne {_id: dataObject.flowId}
+    Entities.update {name: flow.entityName}, {$set: {deleted: true}}

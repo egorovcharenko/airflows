@@ -13,7 +13,6 @@ var publicRoutes = [
 	"forgot_password",
 	"reset_password",
 	"registerInvite"
-
 ];
 
 var privateRoutes = [

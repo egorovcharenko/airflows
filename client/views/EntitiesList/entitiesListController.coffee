@@ -7,6 +7,7 @@
       ]
   data: ->
     data = {}
-    data.ent = Entities.find()
+    data.ent = Entities.find({}, deleted: {$ne: true})
+    console.log "data:", data.ent.fetch()
     return data
 )

@@ -10,7 +10,7 @@
     return
   data: ->
     result = {}
-    groups = FlowGroups.find({}).fetch()
+    groups = FlowGroups.find({}, {sort: {name:1}}).fetch()
     for group in groups
       group.flows = Flows.find({groupId: group._id}).fetch()
     console.log "groups:", groups

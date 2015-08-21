@@ -43,6 +43,9 @@ Meteor.methods
       # если это и так последняя задача - завершить процесс целиком
       if nextTask.type == "end"
         FlowsIns.update({_id: flowIns._id}, {$set:{state: "finished"}}, {tx: true})
+        if entIns?
+          # обновить статус сущности - на завершенную
+          EntitiesIns.update({_id: entIns._id}, {$set: {state: "Завершено"}}, {tx: true})
         # если это дочерний вложенный процесс - то завершить родительскую задачу
         if flowIns.parentTaskInsId?
           Meteor.call "completeTask", TasksIns.findOne({_id: flowIns.parentTaskInsId}), (error, result) ->
@@ -82,3 +85,15 @@ Meteor.methods
     console.log "updateEntityInsDataField started, dataObject:", dataObject
     #flowIns = FlowsIns.findOne({_id: dataObject.flowInsId})
     EntitiesIns.update({parentFlowId: dataObject.flowInsId, 'fields.name': dataObject.fieldName}, {$set: {'fields.$.value': dataObject.newValue}})
+
+  "addNewFlowGroup": (dataObject) ->
+    console.log "addNewFlowGroup started, dataObject:", dataObject
+    accountId = Meteor.user().profile.accountId
+    newGroup = {
+      accountId: accountId
+      name: dataObject.groupName
+    }
+    FlowGroups.insert newGroup
+  "deleteFlowGroup": (dataObject) ->
+    console.log "deleteFlowGroup started, dataObject:", dataObject
+    FlowGroups.remove {name: dataObject.groupName}

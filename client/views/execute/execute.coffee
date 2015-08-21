@@ -18,20 +18,43 @@ Template.executeSingleFlow.events
 	'click #edit-flow-button': (event, template) ->
 		Router.go('drawFlow', {flowId: this._id})
 
+
+Template.execute.helpers
+	hasNoFlows: ->
+		@flows.length == 0
+
+Template.executeAddNewFlow.events
 	'click #add-new-flow': (event, template) ->
 		dataObject = {}
 		dataObject.flowName = template.find("#newFlowName").value
 		dataObject.flowDesc = template.find("#textarea_desc").value
+		dataObject.groupId = @_id
 
 		Meteor.call "addFlow", dataObject, (error, result) ->
 			if error
-				console.log "error", error
-				Materialize.toast('Ошибка при создании процесса:' + error, 4000)
+				Materialize.toast error.reason, 4000
 			else
 				if result
 					Router.go('drawFlow', {flowId: result.flowId})
 				else
 					Materialize.toast('Ошибка при создании процесса: не вернулся результат', 4000)
+					
+Template.execute.events
+	'click #add-new-flow-group': (event, template) ->
+		groupName = template.find("#newFlowGroupName").value
+		if groupName == ""
+			Materialize.toast "Название группы не может быть пустым"
+			return
+		Meteor.call "addNewFlowGroup", {groupName: groupName}, (error, result) ->
+			if error
+				Materialize.toast error.reason, 4000
+			else
+				template.find("#newFlowGroupName").value = ""
+
+	'click #delete-flow-group': (event, template) ->
+		Meteor.call "deleteFlowGroup", {groupName: this.name}, (error, result) ->
+			if error
+				Materialize.toast error.reason, 4000
 
 Template.executeSingleFlow.helpers
 	dataFields: ->
@@ -45,6 +68,9 @@ Template.executeSingleFlow.helpers
 		#console.log "this:", this
 
 Template.execute.onRendered ->
-  $(document).ready ->
-    $('.collapsible').collapsible
-      accordion : false # A setting that changes the collapsible behavior to expandable instead of the default accordion style
+	this.autorun ->
+		data = Router.current().data()
+		Tracker.afterFlush ->
+		  $(document).ready ->
+		    $('.collapsible').collapsible
+		      accordion : false # A setting that changes the collapsible behavior to expandable instead of the default accordion style

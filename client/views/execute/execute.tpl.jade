@@ -15,13 +15,23 @@
               i.medium.mdi-action-note-add
               p Создать процесс
             .collapsible-body
-              .row.collapsible-content
-                .input-field.col.s12
-                  input.validate(id="newFlowName" type="text")
-                  label(for="newFlowName") Название
-                .input-field.col.s12
-                  textarea.materialize-textarea(id="textarea_desc")
-                  label(for="textarea_desc") Описание
-              .row.center-align
-                .col.s12
-                  a#add-new-flow.btn.waves-effect.waves-light.deep-orange.accent-3 Создать
+              +executeAddNewFlow
+          // удаление группы
+          if hasNoFlows
+            li
+              .collapsible-header
+                i.medium.mdi-action-highlight-remove
+                p Удалить группу
+              .collapsible-body
+                .row.collapsible-content.center-align
+                  .col.s12
+                    a#delete-flow-group.btn.waves-effect.waves-light.deep-orange.accent-3 Удалить
+    // добавление новой группы
+    .col.s4
+      .row
+        .input-field.col.s12
+          input.validate(id="newFlowGroupName" type="text")
+          label(for="newFlowGroupName") Название новой группы
+      .row
+        .col.s12.center-align
+          a#add-new-flow-group.btn.waves-effect.waves-light.deep-orange.accent-3 Добавить группу

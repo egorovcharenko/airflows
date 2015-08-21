@@ -8,7 +8,7 @@
       ]
   data: ->
     data = {}
-    data.ent = Entities.find()
+    data.ent = Entities.find({}, {deleted: {$ne: true}})
     data.entIns = EntitiesIns.find()
     data.currentEntity = Entities.find({name: @params.type})
     console.log "EntitiesTableController data finished"

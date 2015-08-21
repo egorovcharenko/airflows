@@ -2,7 +2,6 @@
   p #{prettyName}
 .collapsible-body
   .collapsible-content
-    h5 #{prettyName}
     p #{description}
     .data-entry
       each dataFields
@@ -11,7 +10,15 @@
             input.validate.enter-data-field(type="text" data-field-name="{{name}}")
             label(for="enter-data-field") {{name}}
     .flow-buttons
-      a#run-flow.btn.waves-effect.waves-light.deep-orange.accent-3
-        div Запуск
-      a#edit-flow-button.btn.waves-effect.waves-light.teal.darken-1.right
-        div Изм.
+      .row
+        .col.s12.center-align
+          a#run-flow.btn.waves-effect.waves-light.deep-orange.accent-3
+            div Запуск
+      .row
+        .col.s12.center-align
+          a#edit-flow-button.btn.waves-effect.waves-light.teal.darken-1
+            div Изменить
+      .row
+        .col.s12.center-align
+          a#delete-flow-button.btn.waves-effect.waves-light.teal.darken-1
+            div Удалить

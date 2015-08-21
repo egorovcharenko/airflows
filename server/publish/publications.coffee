@@ -10,7 +10,7 @@ Meteor.publishComposite 'allFlowGroups', ->
     children: [
       {
         find: (group) ->
-          Flows.find({groupId: group._id})
+          Flows.find({groupId: group._id, deleted: {$ne: true}})
         children: [
           {
             find: (flow) ->
@@ -44,7 +44,7 @@ Meteor.publish "allUsers", ->
 
 Meteor.publish "allEntities", (args) ->
   currentUser = Meteor.users.findOne({_id: this.userId})
-  Entities.find({accountId: currentUser.profile.accountId})
+  Entities.find({accountId: currentUser.profile.accountId}, deleted: {$ne: true})
 
 Meteor.publish "allInvitations", ->
   currentUser = Meteor.users.findOne({_id: this.userId})
@@ -82,9 +82,18 @@ Meteor.publish "allRoles", (args) ->
   currentUser = Meteor.users.findOne({_id: this.userId})
   Roles.find({accountId: currentUser.profile.accountId})
 
-Meteor.publish "topEntitiesIns", (type, limit) ->
-  currentUser = Meteor.users.findOne({_id: this.userId})
-  EntitiesIns.find({type: type, accountId: currentUser.profile.accountId}, {limit: limit})
+Meteor.publishComposite "topEntitiesIns", (type, limit) ->
+  {
+    find: ->
+      currentUser = Meteor.users.findOne({_id: this.userId})
+      EntitiesIns.find({type: type, accountId: currentUser.profile.accountId}, {limit: limit})
+    children: [
+      {
+        find: (entityIns) ->
+          TasksIns.find({flowInsId: entityIns.parentFlowId})
+      }
+    ]
+  }
 
 Meteor.publishComposite 'flow', (flowId) ->
   {

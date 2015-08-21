@@ -1,3 +1,3 @@
 each this.ent
-  .btn-flat
-    a#gotoEntityType(href='#', data-toggle='tab', aria-expanded='true') #{prettyName}
+  .btn-flat.entity-button
+    a#gotoEntityType(href='{{pathFor "entitiesTable" type=this.name}}', data-toggle='tab', aria-expanded='true') #{name}
