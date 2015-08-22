@@ -19,3 +19,16 @@ this.EntitiesIns.before.update(function(userId, doc, fieldNames, modifier, optio
 	modifier.$set.modifiedAt = new Date();
 	modifier.$set.modifiedBy = userId;
 });
+
+myJobs = JobCollection('myJobQueue', {
+  idGeneration: 'MONGO',
+  transform: function (d) {
+    var res;
+    try {
+      res = new Job (myJobs, d);
+    } catch (e) {
+      res = d;
+    }
+    return res;
+  }
+});

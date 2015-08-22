@@ -9,12 +9,14 @@ Template.executeSingleFlow.events
 				name: field.dataset.fieldName,
 				value: field.value
 				})
+			field.value = ""
 		#console.log "dataObject.fields:", dataObject.fields
 		Meteor.call "runFlow", dataObject, (error, result) ->
 			if error
 				console.log "error", error
 			else if result
-				Router.go "tasks"
+				Materialize.toast "Процесс успешно запущен", 4000
+				;#Router.go "tasks"
 	'click #edit-flow-button': (event, template) ->
 		Router.go('drawFlow', {flowId: this._id})
 
@@ -38,7 +40,7 @@ Template.executeAddNewFlow.events
 					Router.go('drawFlow', {flowId: result.flowId})
 				else
 					Materialize.toast('Ошибка при создании процесса: не вернулся результат', 4000)
-					
+
 Template.execute.events
 	'click #add-new-flow-group': (event, template) ->
 		groupName = template.find("#newFlowGroupName").value

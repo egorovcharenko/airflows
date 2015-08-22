@@ -1,0 +1,29 @@
+.ui.segment
+  table.ui.compact.celled.table
+    thead
+      tr 
+        th Id
+        th Тип
+        th Обновлено
+        th Запуск в
+        th Попыток
+        th Повторов
+        th Статус
+        th Лог
+    tbody
+      each this
+        tr
+          td #{jobId}
+          td #{_doc.type}
+          td #{lastUpdated}
+          td #{runAt}
+          td #{_doc.retried} / #{numRetries}
+          td #{_doc.repeated} / #{numRepeats}
+          td #{_doc.status}
+          td
+            table.ui.compact.celled.table
+              tbody
+                each this._doc.log
+                  tr
+                    td {{prettifyDateTime time}}
+                    td #{message}

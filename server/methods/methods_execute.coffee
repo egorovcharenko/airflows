@@ -94,6 +94,13 @@ Meteor.methods
       name: dataObject.groupName
     }
     FlowGroups.insert newGroup
+
   "deleteFlowGroup": (dataObject) ->
     console.log "deleteFlowGroup started, dataObject:", dataObject
     FlowGroups.remove {name: dataObject.groupName}
+
+  "saveSchedule": (dataObject) ->
+    console.log "saveSchedule started, dataObject:", dataObject
+    Flows.update({_id: dataObject.flowId}, {$set: {schedule: dataObject.schedule}})
+    # запустить шедулинг процесса
+    runSchedulingForFlowId(dataObject.flowId)

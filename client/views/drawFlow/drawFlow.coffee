@@ -23,10 +23,13 @@ Template.drawFlow.events
 				console.log "success"
 	'click #add-task-after': (event, template) ->
     # добавить новую задачу
-		console.log "Template.parentData():", Template.parentData()
-		Meteor.call "addTaskAfter", this.task, (error, result) ->
+		#console.log "Template.parentData():", Template.parentData()
+		destinationId = this.destinationId
+		sourceId = this.sourceId
+		#console.log "destId:", destId, ", task:", Template.parentData(0)
+		Meteor.call "addTaskAfter", {sourceId: sourceId, destinationId: destinationId},  (error, result) ->
 			if error
-				console.log "error", error
+				Materialize.toast error.reason, 4000
 			if result
 				console.log "success"
 	'click #save-edited-task': (event, template) ->
@@ -113,6 +116,14 @@ Template.drawFlow.helpers
 		#console.log "this.id:", this.id
 		#console.log "task.roleId:",Template.parentData().task.roleId
 		this.id == Template.parentData().task.roleId
+	hasNoRoleAssigned: ->
+		console.log "hasNoRoleAssigned:", this.tasks
+		if this.task.type == "end"
+			return false
+		if this.task.roleId?
+			if this.task.roleId != "unassigned"
+				return false
+		return true
 	classForSelectedRole: ->
 		if this.id == Template.parentData().task.roleId
 			return "selected_class"
@@ -166,6 +177,7 @@ Template.drawFlow.helpers
 		connections.length > 1
 	editMode: ->
 		this.task.editMode
+
 
 @getTaskConnections = (task) ->
 	result = []

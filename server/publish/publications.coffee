@@ -82,11 +82,15 @@ Meteor.publish "allRoles", (args) ->
   currentUser = Meteor.users.findOne({_id: this.userId})
   Roles.find({accountId: currentUser.profile.accountId})
 
-Meteor.publishComposite "topEntitiesIns", (type, limit) ->
+Meteor.publishComposite "topEntitiesIns", (type, limit, showCompleted) ->
   {
     find: ->
       currentUser = Meteor.users.findOne({_id: this.userId})
-      EntitiesIns.find({type: type, accountId: currentUser.profile.accountId}, {limit: limit})
+      console.log "showCompleted:", showCompleted
+      if showCompleted == "1"
+        return EntitiesIns.find({type: type, accountId: currentUser.profile.accountId}, {limit: limit})
+      else
+        return EntitiesIns.find({type: type, accountId: currentUser.profile.accountId, state: {$ne: "Завершено"}}, {limit: limit})
     children: [
       {
         find: (entityIns) ->

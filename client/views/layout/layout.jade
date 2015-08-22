@@ -37,7 +37,7 @@ template(name="PublicLayout")
           span AirFlows
           span.beta-title beta
         a.button-collapse(href="#" data-activates="mobile-demo")
-          i.material-icons Меню
+          i.mdi-navigation-menu
         ul.right.hide-on-med-and-down
           li
             a(href="{{pathFor 'home_public'}}") Главная
@@ -45,13 +45,13 @@ template(name="PublicLayout")
             a(href="{{pathFor 'login'}}") Войти
           li.deep-orange.accent-3
             a(href="{{pathFor 'register'}}") Попробовать бесплатно
-          ul#mobile-demo.side-nav
-            li
-              a(href="{{pathFor 'home_public'}}") Главная
-            li
-              a(href="{{pathFor 'login'}}") Войти
-            li.deep-orange.accent-3
-              a(href="{{pathFor 'register'}}") Попробовать бесплатно
+        ul#mobile-demo.side-nav
+          li
+            a(href="{{pathFor 'home_public'}}") Главная
+          li
+            a(href="{{pathFor 'login'}}") Войти
+          li.deep-orange.accent-3
+            a(href="{{pathFor 'register'}}") Попробовать бесплатно
 
 
 template(name="PrivateLayout")
@@ -62,7 +62,7 @@ template(name="PrivateLayout")
           span AirFlows
           span.beta-title beta
         a.button-collapse(href="#" data-activates="mobile-demo")
-          i.material-icons Меню
+          i.mdi-navigation-menu
         ul.right.hide-on-med-and-down
           li
             a(href="{{pathFor 'tasks'}}") Мои задачи
@@ -76,17 +76,17 @@ template(name="PrivateLayout")
           //-   a(href="{{pathFor 'user_settings'}}") Настройки
           li
             a(href="{{pathFor 'logout'}}") Выйти
-          ul#mobile-demo.side-nav
-            li
-              a(href="{{pathFor 'tasks'}}") Мои задачи
-            li
-              a(href="{{pathFor 'execute'}}") Процессы
-            li
-              a(href="{{pathFor 'entitiesList'}}") Статус
-            li
-              a(href="{{pathFor 'accountRoles'}}") Роли
-            //- li
-            //-   a(href="{{pathFor 'user_settings'}}") Настройки
-            li
-              a(href="{{pathFor 'logout'}}") Выйти
+        ul#mobile-demo.side-nav
+          li
+            a(href="{{pathFor 'tasks'}}") Мои задачи
+          li
+            a(href="{{pathFor 'execute'}}") Процессы
+          li
+            a(href="{{pathFor 'entitiesList'}}") Статус
+          li
+            a(href="{{pathFor 'accountRoles'}}") Роли
+          //- li
+          //-   a(href="{{pathFor 'user_settings'}}") Настройки
+          li
+            a(href="{{pathFor 'logout'}}") Выйти
   

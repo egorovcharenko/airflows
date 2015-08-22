@@ -72,42 +72,27 @@ Meteor.methods
             newPos.push newTask.pos
             Tasks.update({_id: eachTask._id, "decisions.id": decision.id}, {$set: {"decisions.$.nextPos": _.uniq(newPos)}})
 
-  "addTaskAfter": (task, nextPos) ->
-    console.log "addTaskAfter started, task:#{task}, nextPos:#{nextPos}"
-    # создаем новую задачу
+  "addTaskAfter": (dataObject) ->
+    console.log "addTaskAfter started, dataObject:", dataObject
     accountId = Meteor.user().profile.accountId
-    tasks = Tasks.find({flowId: task.flowId}).fetch()
-    newTask = createEmptyTask task, accountId, tasks
-    # проставляем исходящую ссылку
-    if not task.decisions?
-      nextPos = task.nextPos[0]
-      #nextPosTask = _.findWhere(tasks, {pos: nextPos})
-      nextTaskPos = nextPos[0]
-      newNextPos = _.without(nextPos, nextTaskPos)
-      newNextPos.push newTask.pos
+    sourceTask = Tasks.findOne({_id: dataObject.sourceId})
+    destTask = Tasks.findOne({_id: dataObject.destinationId})
+    console.log "sourceTask:", sourceTask, ", destTask:", destTask
 
-      newTask.nextPos.push nextPos
-      #Tasks.update ({_id: task._id}, {$set: {nextPos: []}})
-    else
-      newTask.nextPos = task.nextPos
+    tasks = Tasks.find({flowId: sourceTask.flowId}).fetch()
+    # создаем новую задачу
+    newTask = createEmptyTask destTask, accountId, tasks
+    # проставляем ссылку у новой задачи на следующую задачу
+    newTask.nextPos = sourceTask.nextPos
+    # записываем задачу
     newTaskId = Tasks.insert newTask
-    #console.log "newTaskId:",newTaskId
-
-    # добавляем ссылки на нее у всех ссылающихся
-    for eachTask in tasks
-      # найти каждую ссылающуюся задачу
-      if eachTask.nextPos?
-        if _.contains(eachTask.nextPos, task.pos)
-          newPos = eachTask.nextPos
-          newPos.push newTask.pos
-          Tasks.update({_id: eachTask._id}, {$set: {nextPos: _.uniq(newPos)}})
-      # найти каждое ссылающееся решение
-      if eachTask.decisions?
-        for decision in eachTask.decisions
-          if _.contains(decision.nextPos, task.pos)
-            newPos = decision.nextPos
-            newPos.push newTask.pos
-            Tasks.update({_id: eachTask._id, "decisions.id": decision.id}, {$set: {"decisions.$.nextPos": _.uniq(newPos)}})
+    console.log "newTask:", newTask
+    # проставляем ссылку у старой задачи - на новую задачу
+    sourceNextPos = sourceTask.nextPos
+    newPos = _.without(sourceNextPos, destTask.pos)
+    newPos.push newTask.pos
+    Tasks.update({_id: sourceTask._id}, {$set: {nextPos: _.uniq(newPos)}})
+    console.log "new source task:", Tasks.findOne({_id: dataObject.sourceId})
 
   "saveEditedTask": (task, editMode) ->
     Tasks.update({_id: task._id}, {$set: {

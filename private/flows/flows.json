@@ -21,6 +21,6 @@
     "prettyName": "Демо процесс",
     "description": "Пример того, что умеет AirFlows",
     "entityName": "demoEntity",
-    "groupId": "newGroup2"
+    "groupId": ""
   }
 ]

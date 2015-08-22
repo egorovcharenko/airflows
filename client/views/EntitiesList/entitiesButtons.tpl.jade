@@ -1,3 +1,2 @@
 each this.ent
-  .btn-flat.entity-button
-    a#gotoEntityType(href='{{pathFor "entitiesTable" type=this.name}}', data-toggle='tab', aria-expanded='true') #{name}
+  a#gotoEntityType.btn-flat.entity-button(href='{{pathFor "entitiesTable" type=this.name showCompleted=0}}', data-toggle='tab', aria-expanded='true') #{name}

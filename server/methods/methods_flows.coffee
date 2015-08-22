@@ -93,3 +93,7 @@ Meteor.methods
     # удалить связанны сущности
     flow = Flows.findOne {_id: dataObject.flowId}
     Entities.update {name: flow.entityName}, {$set: {deleted: true}}
+
+  'startSchedulingFlow': (dataObject) ->
+    flow = Flows.findOne({_id: dataObject._id})
+    reRunAllJobs()

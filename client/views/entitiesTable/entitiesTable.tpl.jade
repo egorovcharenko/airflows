@@ -8,7 +8,7 @@
     table.table.table-striped.table-hover
       thead
         tr
-          th Создано
+          //th Создано
           th Обновлено
           th Автор
           th Статус
@@ -18,10 +18,13 @@
       tbody
         each this.entIns
           tr
-            td {{prettifyDate createdAt}}
+            //td {{prettifyDate createdAt}}
             td {{prettifyDate modifiedAt}}
             td #{getUser.profile.name}
             td #{state}
             td {{{currentTask}}}
             each getFieldValues
               td #{value}
+  .row
+    .col.s12.center-align
+      a#show-completed-button.btn-flat Показать завершенные процессы

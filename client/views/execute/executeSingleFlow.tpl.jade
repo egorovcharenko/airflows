@@ -12,13 +12,86 @@
     .flow-buttons
       .row
         .col.s12.center-align
-          a#run-flow.btn.waves-effect.waves-light.deep-orange.accent-3
+          a#run-flow.btn.waves-effect.waves-light.deep-orange.accent-3.flow-execute-buttons
             div Запуск
       .row
         .col.s12.center-align
-          a#edit-flow-button.btn.waves-effect.waves-light.teal.darken-1
+          a#edit-flow-button.btn.waves-effect.waves-light.teal.darken-1.flow-execute-buttons
             div Изменить
       .row
         .col.s12.center-align
-          a#delete-flow-button.btn.waves-effect.waves-light.teal.darken-1
+          a#edit-flow-schedule-button(class="btn waves-effect waves-light {{#if scheduleIsEnabled}}deep-orange accent-3{{else}}teal{{/if}} darken-1 flow-execute-buttons modal-trigger" href="#modal-for-{{_id}}")
+            if scheduleIsEnabled
+              div Расписание (вкл.) 
+            else
+              div Расписание
+      .row
+        .col.s12.center-align
+          a#delete-flow-button.btn.waves-effect.waves-light.teal.darken-1.flow-execute-buttons
             div Удалить
+.modal(id="modal-for-{{_id}}")
+  .modal-content
+    h4 Задайте расписание процессу {{prettyName}}
+    input(type="checkbox" class="filled-in" id="enabled-for-{{_id}}" checked="{{schedule.enabled}}")
+    label(for="enabled-for-{{_id}}") Включить повторения?
+    .row
+      .col.s12.m6
+        form(action="#")
+          p
+            input(type="checkbox" id="monday-for-{{_id}}" checked="{{schedule.mon}}")
+            label(for="monday-for-{{_id}}") Понедельник
+          p
+            input(type="checkbox" id="thuesday-for-{{_id}}" checked="{{schedule.tue}}")
+            label(for="thuesday-for-{{_id}}") Вторник
+          p
+            input(type="checkbox" id="wednesday-for-{{_id}}" checked="{{schedule.wed}}")
+            label(for="wednesday-for-{{_id}}") Среда
+          p
+            input(type="checkbox" id="thursday-for-{{_id}}" checked="{{schedule.thu}}")
+            label(for="thursday-for-{{_id}}") Четверг
+          p
+            input(type="checkbox" id="friday-for-{{_id}}" checked="{{schedule.fri}}")
+            label(for="friday-for-{{_id}}") Пятница
+          p
+            input(type="checkbox" id="saturday-for-{{_id}}" checked="{{schedule.sat}}")
+            label(for="saturday-for-{{_id}}") Суббота
+          p
+            input(type="checkbox" id="sunday-for-{{_id}}" checked="{{schedule.sun}}")
+            label(for="sunday-for-{{_id}}") Воскресенье
+      .col.s12.m6
+        .input-field
+          select.hour-selected(id="hour-select-for-{{_id}}")
+            option(value="00" selected="{{hourSelected 0}}") 00
+            option(value="01" selected="{{hourSelected 1}}") 01
+            option(value="02" selected="{{hourSelected 2}}") 02
+            option(value="03" selected="{{hourSelected 3}}") 03
+            option(value="04" selected="{{hourSelected 4}}") 04
+            option(value="05" selected="{{hourSelected 5}}") 05
+            option(value="06" selected="{{hourSelected 6}}") 06
+            option(value="07" selected="{{hourSelected 7}}") 07
+            option(value="08" selected="{{hourSelected 8}}") 08
+            option(value="09" selected="{{hourSelected 9}}") 09
+            option(value="10" selected="{{hourSelected 10}}") 10
+            option(value="11" selected="{{hourSelected 11}}") 11
+            option(value="12" selected="{{hourSelected 12}}") 12
+            option(value="13" selected="{{hourSelected 13}}") 13
+            option(value="14" selected="{{hourSelected 14}}") 14
+            option(value="15" selected="{{hourSelected 15}}") 15
+            option(value="16" selected="{{hourSelected 16}}") 16
+            option(value="16" selected="{{hourSelected 17}}") 17
+            option(value="18" selected="{{hourSelected 18}}") 18
+            option(value="19" selected="{{hourSelected 19}}") 19
+            option(value="20" selected="{{hourSelected 20}}") 20
+            option(value="21" selected="{{hourSelected 21}}") 21
+            option(value="22" selected="{{hourSelected 22}}") 22
+            option(value="23" selected="{{hourSelected 23}}") 23
+          label Час
+        .input-field
+          select(id="minutes-select-for-{{_id}}" value="{{schedule.minutes}}")
+            option(value="00" selected="{{minutesSelected 0}}") 00
+            option(value="15" selected="{{minutesSelected 15}}") 15
+            option(value="30" selected="{{minutesSelected 30}}") 30
+            option(value="45" selected="{{minutesSelected 45}}") 45
+          label Минуты
+  .modal-footer
+    a#save-schedule(href="#!" class="modal-action modal-close waves-effect waves-green btn-flat") Сохранить

@@ -27,7 +27,7 @@
           tr
             each this
               if notEmpty
-                td(colspan="{{maxColspan}}" class="top-aligned task-td {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}{{#if isEnd}}end-cell {{/if}}{{#if isStart}}white-text{{/if}} {{#if editMode}}editing-td{{/if}}")
+                td(colspan="{{maxColspan}}" class="top-aligned task-td {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}{{#if isEnd}}end-cell {{/if}}{{#if isStart}}white-text{{/if}} {{#if editMode}}editing-td{{/if}} {{#if hasNoRoleAssigned}}no-role-assigned-td{{/if}}")
                   if isEnd
                     div(class="card task-panel")
                       // кнопка добавить перед
@@ -136,6 +136,6 @@
                                 span.connection-dot(id="connection-from-{{sourceId}}-to-{{destinationId}}") &middot;
                                   // кнопка добавить снизу
                                   a.btn-floating.waves-effect.waves-light.deep-orange.add-task-button-generic.add-task-after(id="add-task-after")
-                                    i.medium.mdi-action-note-add
+                                    i.medium.mdi-action-note-add( data-destination-id="{{destinationId}}")
               else
                 td(class="empty {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}")

@@ -54,6 +54,7 @@ monbro:mongodb-mapreduce-aggregation@1.0.1
 mongo@1.1.0
 mquandalle:jade@0.4.3
 mquandalle:jade-compiler@0.4.3
+mrt:later@1.6.1
 mrt:moment@2.8.1
 npm-bcrypt@0.7.8_2
 observe-sequence@1.0.6
@@ -82,6 +83,7 @@ tracker@1.0.7
 ui@1.0.6
 underscore@1.0.3
 url@1.0.4
+vsivsi:job-collection@1.2.2
 webapp@1.2.0
 webapp-hashing@1.0.3
 wylio:mandrill@1.0.1

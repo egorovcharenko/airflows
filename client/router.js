@@ -190,7 +190,7 @@ Router.map(function () {
 	this.route("tasks", {path: "/tasks", controller: "TasksController"});
 	this.route("execute", {path: "/execute", controller: "ExecuteController"});
 	this.route("entitiesList", {path: "/entities/list", controller: "EntitiesListController"});
-	this.route("entitiesTable", {path: "/entities/list/:type", controller: "EntitiesTableController"});
+	this.route("entitiesTable", {path: "/entities/list/:type/:showCompleted", controller: "EntitiesTableController"});
 	this.route("drawFlow", {path: "/flow/:flowId", controller: "DrawFlowController"});
 	this.route("accountRoles", {path: "/roles/list", controller: "RolesController"});
 });
