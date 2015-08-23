@@ -88,8 +88,8 @@ Meteor.methods
   'deleteFlow': (dataObject) ->
     console.log "deleteFlow started, dataObject:",dataObject
     # удалить процесс
-    Flows.update {_id: dataObject.flowId}, {$set: {deleted: true}}
-
+    # если был шедулинг - его убрать
+    Flows.update {_id: dataObject.flowId}, {$set: {deleted: true, schedule: null}}
     # удалить связанны сущности
     flow = Flows.findOne {_id: dataObject.flowId}
     Entities.update {name: flow.entityName}, {$set: {deleted: true}}

@@ -66,6 +66,9 @@ processScheduleJobsWorker = (job, cb) ->
         addJobForFlow flow
 
 @addJobForFlow = (flow) ->
+  # пропускать удаленные процессы
+  if flow.deleted == true
+    return
   schedule = scheduleFromJson flow.schedule
   console.log("schedule for flow #{flow.prettyName}:", myJobs.later.schedule(schedule).next(5))
   # запустить процесс
@@ -75,7 +78,6 @@ processScheduleJobsWorker = (job, cb) ->
     .repeat({schedule: schedule})
     .after(new Date())
     .save({cancelRepeats: false})
-
 
 Meteor.startup ->
   myJobs.startJobServer()

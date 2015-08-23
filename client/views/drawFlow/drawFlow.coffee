@@ -166,9 +166,8 @@ Template.drawFlow.helpers
 		this.hasRightBorder
 
 	debugInfo: ->
-		"operator-#{this.task.roleWidth['operator']}<br>
-		role2-#{this.task.roleWidth['role2']}<br>
-		roleId-#{this.task.roleId}"
+		result = ""
+		"roleId: #{this.task.roleId}"
 
 	notLastConnection: ->
 		connections = getTaskConnections this.task
@@ -177,7 +176,6 @@ Template.drawFlow.helpers
 		connections.length > 1
 	editMode: ->
 		this.task.editMode
-
 
 @getTaskConnections = (task) ->
 	result = []
