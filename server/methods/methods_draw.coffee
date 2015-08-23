@@ -81,7 +81,7 @@ Meteor.methods
 
     tasks = Tasks.find({flowId: sourceTask.flowId}).fetch()
     # создаем новую задачу
-    newTask = createEmptyTask destTask, accountId, tasks
+    newTask = createEmptyTask sourceTask, accountId, tasks
     # проставляем ссылку у новой задачи на следующую задачу
     newTask.nextPos = sourceTask.nextPos
     # записываем задачу
@@ -160,6 +160,7 @@ Meteor.methods
     Tasks.update({_id: sourceTask._id}, {$set: {"nextPos": _.uniq(newPos)}})
 
   "removeTaskConnection": (sourceId, destinationId) ->
+    console.log "removeTaskConnection, sourceId:#{sourceId}, destinationId:#{destinationId}"
     sourceTask = Tasks.findOne({_id: sourceId})
     destTask = Tasks.findOne({_id: destinationId})
     Tasks.update({_id: sourceId}, {$set: {nextPos: _.uniq(_.without(sourceTask.nextPos, destTask.pos))}})

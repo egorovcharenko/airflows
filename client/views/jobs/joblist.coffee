@@ -4,8 +4,6 @@ isInfinity = (val) ->
   else
     val
 
-reactiveDate = new ReactiveVar(new Date())
-
 Template.jobslist.helpers
   jobId: () ->
     "#{this._id.valueOf().substr(0,5)}…"

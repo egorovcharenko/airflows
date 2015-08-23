@@ -103,13 +103,15 @@ Meteor.publishComposite 'flow', (flowId) ->
   {
     find: ->
       currentUser = Meteor.users.findOne({_id: this.userId})
-      Flows.find { _id: flowId, accountId: currentUser.profile.accountId}
+      result = Flows.find { _id: flowId, accountId: currentUser.profile.accountId}
+      console.log "flow:", result.fetch()
+      return result
     children: [
       {
         find: (flow) ->
           #console.log "flow:", flow
           tasks = Tasks.find({flowId: flow.id})
-          #console.log "tasks.count:", tasks.count()
+          console.log "tasks.count:#{tasks.count()}, flow.id:#{flow.id}, flow._id:#{flow._id}, flowId:#{flowId}"
           return tasks
       },
       {

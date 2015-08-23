@@ -12,14 +12,14 @@
     ]
   data: ->
     flow = Flows.findOne({_id: @params.flowId})
-    # TODO найти все роли
     totalTasksCount = Tasks.find({}).count()
-    #console.log "total tasks count:", totalTasksCount
+    console.log "total tasks count:#{totalTasksCount}, flowId:#{@params.flowId}"
     if totalTasksCount == 0
+      console.log "total tasks count = 0"
       return null
     roles = _.without(_.without(_.uniq(Tasks.find({}, {sort: {prettyName: -1}}).map (x) ->
       x.roleId), ""), undefined)
-    console.log "roles:", roles
+    #console.log "roles:", roles
     # задачи - возвращаем накачанный данными массив задач
     # найти все задачи
     tasks = Tasks.find({flowId: flow.id}).fetch()
@@ -44,7 +44,7 @@
       currentOffset = 0
       for roleId in roles
         rolesOffsets[roleId] = currentOffset
-        console.log "rolesOffsets[#{roleId}] = #{rolesOffsets[roleId]}"
+        #console.log "rolesOffsets[#{roleId}] = #{rolesOffsets[roleId]}"
         currentOffset += roleWidthMax[roleId]
         #console.log "Role #{roleId} has width #{roleWidthMax[roleId]}, offset:#{rolesOffsets[roleId]}"
         if roleId?
@@ -73,13 +73,15 @@
       for task in tasks
         if task.decisions?
           for decision in task.decisions
-            for nextPos in decision.nextPos
+            if nextPos?
+              for nextPos in decision.nextPos
+                if nextPos == plTask.pos
+                  isReallyParentless = false
+        else
+          if task.nextPos?
+            for nextPos in task.nextPos
               if nextPos == plTask.pos
                 isReallyParentless = false
-        else
-          for nextPos in task.nextPos
-            if nextPos == plTask.pos
-              isReallyParentless = false
       if not isReallyParentless
         continue
       if plTask.passed
@@ -93,12 +95,13 @@
       # запускаем ее обработку
       setWidth(tasks, plTask, params, roles)
       #console.log "tasks after setWidth:", tasks
-      resetPassed2(tasks)
+      #resetPassed2(tasks)
+      console.log "Нашли задачу без родителя: #{plTask.name}"
       assignCoordinates(tasks, plTask, params, rows, rolesOffsets)
       #console.log "params.matrix:", params.matrix
 
     #console.log "tasks after setWidth:", tasks
-    console.log "params.matrix:", params.matrix
+    #console.log "params.matrix:", params.matrix
 
     rows = makeTableFromCoordinates(tasks,params,rolesOffsets, roles)
 
@@ -111,11 +114,11 @@
 
     # поля с данными
     entity = Entities.findOne({name: flow.entityName})
-    console.log "flow.entityName:", flow.entityName
+    #console.log "flow.entityName:", flow.entityName
     if entity?
       dataFields = entity.fields
 
-    console.log "dataFields:", dataFields
+    #console.log "dataFields:", dataFields
     data = {}
     data.dataFields = dataFields
     data.roles = returnedRoles
@@ -124,6 +127,7 @@
     data.rows = rows
     data.tasks = tasks
     data.flow = flow
+    console.log "final data:", data
     return data
 )
 resetPassed = (tasks) ->
@@ -144,7 +148,11 @@ setWidth = (tasks, task, params, roles) ->
   for role in roles
     if not task.roleWidth[role]?
       task.roleWidth[role] = 0
-  task.passed = true
+  # пропускаем уже пройденные задачи
+  if task.passed
+    return
+  else
+    task.passed = true
   # есть разветвления?
   if task.decisions?
     for decision in task.decisions
@@ -170,7 +178,7 @@ setWidth = (tasks, task, params, roles) ->
       else if nextTask.roleWidth?
         for role of nextTask.roleWidth
           addRoleWidth task, nextTask.roleWidth[role], role
-          #console.log "role: #{role}, width: #{task.roleWidth[role]}"
+          #console.log "setWidth, role: #{role}, width: #{task.roleWidth[role]}"
       else
         #console.log "== strange, nextTask:", nextTask
       #console.log "roleWidth:", task.roleWidth
@@ -181,24 +189,29 @@ addRoleWidth = (task, taskWidth, role) ->
     task.roleWidth = {}
   if not task.roleWidth[role]?
     task.roleWidth[role] = 0
-  task.roleWidth[role] += taskWidth
-  #console.log "#{task.name}.roleWidth[#{role}]:", task.roleWidth[role]
+  # если след. задача в другой роли - не прибавлять роль
+  if task.roleId == role
+    task.roleWidth[role] += taskWidth
+  #console.log "addRoleWidth ended: #{task.name}.roleWidth[#{role}]:", task.roleWidth[role], ", taskWidth:#{taskWidth}"
 
 # присвоить всем дочерним задачам координаты
 assignCoordinates = (tasks, task, params, roleWidthMax, rolesOffsets) ->
   #console.log "Start assignCoordinates, task:", task
+  # если уже присваивали координаты - прекратить
   if task.passed2 == true
     return
   task.passed2 = true
+  console.log "assignCoordinates for #{task.name}"
   if task.type != "end"
     if task.type == "start"
       x = rolesOffsets[task.roleId]
       #console.log "startTask.x = ", x
     else
       x = task.x # + rolesOffsets[task.roleId]
-
-    console.log "Setting matrix for task.x:#{task.x}, offset: #{rolesOffsets[task.roleId]}, coords: #{x}-#{task.y}: ", task
+    #console.log "Setting matrix for task #{task.name}: task.x:#{task.x}, offset: #{rolesOffsets[task.roleId]}, coords: #{x}-#{task.y}: ", task
     params.matrix["#{x}-#{task.y}"] = task
+    params.maxX = Math.max(params.maxX, x)
+    params.maxY = Math.max(params.maxY, task.y)
   else
     return
   # есть решения?
@@ -240,6 +253,7 @@ assignCoordinates = (tasks, task, params, roleWidthMax, rolesOffsets) ->
 
     return
   else
+    #console.log "Присваиваем координаты след. задачам #{task.name}"
     shift = {}
     #console.log "task.nextPos.length:", task.nextPos.length
     # находим следующую задачу
@@ -279,10 +293,10 @@ assignCoordinates = (tasks, task, params, roleWidthMax, rolesOffsets) ->
         assignCoordinates(tasks, nextTask, params, roleWidthMax, rolesOffsets)
 
 makeTableFromCoordinates = (tasks, params, rolesOffsets, roles) ->
-  console.log "starting makeTableFromCoordinates, matrix:", params.matrix
+  #console.log "starting makeTableFromCoordinates, matrix:", params.matrix
   rowsInt = []
-  console.log "params.maxX:",params.maxX
-  console.log "params.maxY:",params.maxY
+  #console.log "params.maxX:",params.maxX
+  #console.log "params.maxY:",params.maxY
   #console.log "starting rowsInt in makeTableFromCoordinates:", rowsInt
   for j in [0..params.maxY]
     currentRow = []
@@ -302,5 +316,5 @@ makeTableFromCoordinates = (tasks, params, rolesOffsets, roles) ->
       #console.log "currentRow: #{currentRow[0].task.type}", currentRow
     rowsInt.push currentRow
     #console.log "rowsInt in makeTableFromCoordinates:", rowsInt
-  console.log "final rows in makeTableFromCoordinates:", rowsInt
+  #console.log "final rows in makeTableFromCoordinates:", rowsInt
   return rowsInt
