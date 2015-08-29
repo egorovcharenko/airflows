@@ -90,7 +90,7 @@ Meteor.publishComposite "topEntitiesIns", (type, limit, showCompleted) ->
       if showCompleted == "1"
         return EntitiesIns.find({type: type, accountId: currentUser.profile.accountId}, {limit: limit})
       else
-        return EntitiesIns.find({type: type, accountId: currentUser.profile.accountId, state: {$ne: "Завершено"}}, {limit: limit})
+        return EntitiesIns.find({type: type, accountId: currentUser.profile.accountId, state: {$nin: ["Завершено", "Отменено"]}}, {limit: limit})
     children: [
       {
         find: (entityIns) ->

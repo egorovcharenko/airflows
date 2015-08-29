@@ -28,7 +28,7 @@ Meteor.methods
       if task.type == "start"
         startTask = task
     # установить первую задачу для выполнения
-    TasksIns.update({flowInsId: flowInsId, pos: startTask.nextPos[0]}, {$set: {state: "current"}})
+    TasksIns.update({flowInsId: flowInsId, pos: startTask.nextPos[0]}, {$set: {state: "current", startTime: new Date()}})
     # если привязана сущность - создать ее
     if dataObject.entityName?
       ent = Entities.findOne({name: dataObject.entityName, accountId: accountId})

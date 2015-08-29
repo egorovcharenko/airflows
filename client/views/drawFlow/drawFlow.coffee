@@ -41,8 +41,14 @@ Template.drawFlow.events
 		if inputInstr
 			task.instructions = inputInstr.value
 		temp = template.find("select")
-		#console.log "temp:", temp
 		task.roleId = temp.value
+		timingTemplate = template.find("input#set-time-field")
+		timingValue = parseInt timingTemplate.value
+		#console.log "timing:", timingValue
+		if isNaN(timingValue) and timingTemplate.value != ""
+			Materialize.toast "Неверное значение тайминга, пожалуйста введите количество минут (например, 15)", 4000
+			return
+		task.timing = timingValue
 		console.log "task.roleId:",task.roleId
 		Meteor.call "saveEditedTask", this.task, false, (error, result) ->
 			if error
@@ -190,6 +196,7 @@ Template.drawFlow.onRendered ->
 		data = Router.current().data()
 		Tracker.afterFlush ->
 			$('select').material_select();
+			$('.collapsible').collapsible({accordion : false})
 			#console.log "============== dom is now created, redrawing"
 			jsPlumb.setContainer($("#links-container"))
 			jsPlumb.detachEveryConnection()

@@ -100,6 +100,7 @@ Meteor.methods
       instructions: task.instructions
       editMode: editMode
       roleId: task.roleId
+      timing: task.timing
       }})
 
   "startEditingTask": (task) ->

@@ -23,7 +23,25 @@ Template.entitiesTable.helpers
     result = ""
     currentTasks = TasksIns.find({flowInsId: @parentFlowId, type: {$nin:["start", "end"]}, state: "current"})
     for task in currentTasks.fetch()
-      str = "#{task.name}: #{task.roleId}"
+      try
+        roleName = Roles.findOne({id: task.roleId}).prettyName
+        # тайминг
+        startTime = task.startTime
+        now = reactiveDate.now()
+        if startTime?
+          minutesElapsed = Math.floor((now - startTime) / (1000*60))
+          if task.timing?
+            if not isNaN(task.timing)
+              minutesLeft = task.timing - minutesElapsed
+      catch e
+        console.log "e:", e
+        roleName = "(не найдено)"
+      console.log "#{now-startTime}, #{now}, #{startTime}, #{minutesElapsed}, #{minutesLeft}, #{task.timing}"
+      str = "#{task.name}: #{roleName}"
+      if minutesElapsed?
+        str = str + ", прошло #{minutesElapsed} минут"
+      if minutesLeft?
+        str = str + ", осталось #{minutesLeft} минут"
       if result == ""
         result = str
       else

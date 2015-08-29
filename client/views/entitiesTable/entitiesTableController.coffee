@@ -5,6 +5,7 @@
       [
         Meteor.subscribe 'allEntities'
         Meteor.subscribe "topEntitiesIns", @params.type, 500, @params.showCompleted
+        Meteor.subscribe "allRoles"
       ]
   data: ->
     data = {}

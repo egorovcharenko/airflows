@@ -110,6 +110,15 @@
                           .col.s2
                             a#add-decision.waves-effect.waves-light.btn.add-decision
                               i.medium.mdi-content-add
+                      // тайминг
+                      if task.editMode
+                        ul.collapsible(data-collapsible="expandable")
+                          li
+                            .collapsible-header Тайминг
+                            .collapsible-body.padded
+                              .input-field
+                                input.validate(id="set-time-field" type="text" value="#{task.timing}")
+                                label.active(for="set-time-field") Сколько минут отводится на задачу (0 или пусто - значит не используется)
                       if task.editMode
                         .row
                           .col.s12.center-align
@@ -137,5 +146,6 @@
                                   // кнопка добавить снизу
                                   a.btn-floating.waves-effect.waves-light.deep-orange.add-task-button-generic.add-task-after(id="add-task-after")
                                     i.medium.mdi-action-note-add( data-destination-id="{{destinationId}}")
+                        
               else
                 td(class="empty {{#if hasLeftBorder}}leftBorder {{/if}}{{#if hasRightBorder}}rightBorder {{/if}}")

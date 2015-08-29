@@ -12,8 +12,8 @@ Meteor.methods
       nextTask = TasksIns.findOne({flowInsId: dataObject.flowInsId, pos: nextPos})
       if not nextTask?
         throw new Meteor.Error(500, "Не найдена следующая задача")
-      # изменить ей статус и указатель на предыдущую задачу
-      TasksIns.update({_id: nextTask._id}, {$set: {state: "current", prevPos: dataObject.pos}}, {tx: true})
+      # изменить ей статус и указатель на предыдущую задачу, а также обновить время запуска
+      TasksIns.update({_id: nextTask._id}, {$set: {state: "current", prevPos: dataObject.pos, startTime: new Date()}}, {tx: true})
       # изменить статус и проставить поля сущности, если она есть
       entIns = EntitiesIns.findOne({parentFlowId: flowIns._id})
       if entIns?
@@ -80,6 +80,8 @@ Meteor.methods
       Meteor.call "stepBack", TasksIns.findOne({_id: flowIns.parentTaskInsId}), (error, result) ->
         if error
           console.log "error", error
+    # пометить сущность с данными как отмененные
+    EntitiesIns.update({parentFlowId: dataObject._id}, {$set: {state: "Отменено"}})
 
   "updateEntityInsDataField": (dataObject) ->
     console.log "updateEntityInsDataField started, dataObject:", dataObject

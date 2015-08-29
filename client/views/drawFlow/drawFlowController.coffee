@@ -13,7 +13,7 @@
   data: ->
     flow = Flows.findOne({_id: @params.flowId})
     totalTasksCount = Tasks.find({}).count()
-    console.log "total tasks count:#{totalTasksCount}, flowId:#{@params.flowId}"
+    #console.log "total tasks count:#{totalTasksCount}, flowId:#{@params.flowId}"
     if totalTasksCount == 0
       console.log "total tasks count = 0"
       return null
@@ -42,7 +42,7 @@
     returnedRoles = []
     if startTask?
       #roleWidthMax = startTask.roleWidth
-      console.log "roleWidthMax:", roleWidthMax
+      #console.log "roleWidthMax:", roleWidthMax
       currentOffset = 0
       for roleId in roles
         rolesOffsets[roleId] = currentOffset
@@ -216,7 +216,7 @@ assignCoordinates = (tasks, task, params, roleWidthMax, rolesOffsets) ->
       #console.log "startTask.x = ", x
     else
       x = task.x # + rolesOffsets[task.roleId]
-    #console.log "Setting matrix for task #{task.name}: task.x:#{task.x}, offset: #{rolesOffsets[task.roleId]}, coords: #{x}-#{task.y}: ", task
+    console.log "Setting matrix for task #{task.name}: task.x:#{task.x}, offset: #{rolesOffsets[task.roleId]}, coords: #{x}-#{task.y}: "#, task
     params.matrix["#{x}-#{task.y}"] = task
     params.maxX = Math.max(params.maxX, x)
     params.maxY = Math.max(params.maxY, task.y)
@@ -244,36 +244,36 @@ assignCoordinates = (tasks, task, params, roleWidthMax, rolesOffsets) ->
           continue
         else
           # присвоить задаче координаты
-          #console.log "task.x (#{task.x}) - rolesOffsets[task.roleId](#{rolesOffsets[task.roleId]}) + rolesOffsets[decisionTask.roleId](#{rolesOffsets[decisionTask.roleId]}) + shift[decisionTask.roleId](#{shift[decisionTask.roleId]}), decisionTask.roleId: #{decisionTask.roleId}"
+          console.log "task.x (#{task.x}) - rolesOffsets[task.roleId](#{rolesOffsets[task.roleId]}) + rolesOffsets[decisionTask.roleId](#{rolesOffsets[decisionTask.roleId]}) + shift[decisionTask.roleId](#{shift[decisionTask.roleId]}), decisionTask.roleId: #{decisionTask.roleId}"
           if decisionTask.roleId?
-            decisionTask.x = 1 - rolesOffsets[task.roleId] + rolesOffsets[decisionTask.roleId] + shift[decisionTask.roleId]
+            decisionTask.x = task.x - rolesOffsets[task.roleId] + rolesOffsets[decisionTask.roleId] + shift[decisionTask.roleId]
           else
-            decisionTask.x = 1 - rolesOffsets[task.roleId]
+            decisionTask.x = task.x - rolesOffsets[task.roleId]
           decisionTask.y = task.y + 1
           shift[decisionTask.roleId]++
           params.maxX = Math.max(params.maxX, decisionTask.x)
           #console.log "2 maxX:#{params.maxX}, decisionTask.x:#{decisionTask.x}"
           params.maxY = Math.max(params.maxY, decisionTask.y)
 
-          #console.log "decisiontask.name:#{decisionTask.name}, x:#{decisionTask.x}, y:#{decisionTask.y}, shift:#{shift}, maxX:#{params.maxX}, maxY:#{params.maxY}"
+          console.log "decisiontask.name:#{decisionTask.name}, x:#{decisionTask.x}, y:#{decisionTask.y}, shift:#{shift}, maxX:#{params.maxX}, maxY:#{params.maxY}"
 
           assignCoordinates(tasks, decisionTask, params, roleWidthMax, rolesOffsets)
 
     return
   else
-    console.log "Присваиваем координаты след. задачам #{task.name}"
+    #console.log "Присваиваем координаты след. задачам #{task.name}"
     shift = {}
-    console.log "task.nextPos.length:", task.nextPos.length
+    #console.log "task.nextPos.length:", task.nextPos.length
     # находим следующую задачу
     for nextPos in task.nextPos
-      console.log "nextPos:", nextPos
+      #console.log "nextPos:", nextPos
       nextTask = _.findWhere(tasks, {pos: nextPos})
       if nextTask.passed2
         continue
       else
         if nextTask.type == "end"
           continue
-        console.log "task.x:#{task.x}, task.roleId:#{task.roleId}, task:", task
+        #console.log "task.x:#{task.x}, task.roleId:#{task.roleId}, task:", task
         if task.type == "start"
           x = task.x
         else
@@ -281,7 +281,7 @@ assignCoordinates = (tasks, task, params, roleWidthMax, rolesOffsets) ->
         if not shift[nextTask.roleId]?
           shift[nextTask.roleId] = 0
         # вычислить координаты
-        console.log "x (#{x}) + rolesOffsets[#{nextTask.roleId}](#{rolesOffsets[nextTask.roleId]}) + shift[nextTask.roleId](#{shift[nextTask.roleId]}), nextTask.roleId: #{nextTask.roleId}"
+        #console.log "x (#{x}) + rolesOffsets[#{nextTask.roleId}](#{rolesOffsets[nextTask.roleId]}) + shift[nextTask.roleId](#{shift[nextTask.roleId]}), nextTask.roleId: #{nextTask.roleId}"
         if nextTask.roleId?
           nextTask.x = x + rolesOffsets[nextTask.roleId] + shift[nextTask.roleId]
         else
