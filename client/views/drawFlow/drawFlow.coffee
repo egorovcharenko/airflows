@@ -42,13 +42,20 @@ Template.drawFlow.events
 			task.instructions = inputInstr.value
 		temp = template.find("select")
 		task.roleId = temp.value
+		# тайминг
 		timingTemplate = template.find("input#set-time-field")
 		timingValue = parseInt timingTemplate.value
-		#console.log "timing:", timingValue
 		if isNaN(timingValue) and timingTemplate.value != ""
 			Materialize.toast "Неверное значение тайминга, пожалуйста введите количество минут (например, 15)", 4000
 			return
 		task.timing = timingValue
+		# задержка
+		delayTemplate = template.find("input#set-delay-field")
+		delayValue = parseInt delayTemplate.value
+		if isNaN(delayValue) and delayTemplate.value != ""
+			Materialize.toast "Неверное значение задержки, пожалуйста введите количество минут (например, 15)", 4000
+			return
+		task.delay = delayValue
 		console.log "task.roleId:",task.roleId
 		Meteor.call "saveEditedTask", this.task, false, (error, result) ->
 			if error

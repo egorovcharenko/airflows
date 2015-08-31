@@ -95,13 +95,18 @@ Meteor.methods
     console.log "new source task:", Tasks.findOne({_id: dataObject.sourceId})
 
   "saveEditedTask": (task, editMode) ->
-    Tasks.update({_id: task._id}, {$set: {
-      name: task.name
-      instructions: task.instructions
-      editMode: editMode
-      roleId: task.roleId
-      timing: task.timing
-      }})
+    fieldsSet = {}
+    fieldsSet.name = task.name
+    fieldsSet.instructions = task.instructions
+    fieldsSet.editMode = editMode
+    fieldsSet.roleId = task.roleId
+    if task.timing?
+      if not isNaN(task.timing)
+        fieldsSet.timing = task.timing
+    if task.delay?
+      if not isNaN(task.delay)
+        fieldsSet.delay = task.delay
+    Tasks.update({_id: task._id}, {$set: fieldsSet})
 
   "startEditingTask": (task) ->
     Tasks.update({_id: task._id}, {$set: {editMode: true}})

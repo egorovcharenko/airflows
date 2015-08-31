@@ -1,7 +1,7 @@
 this.App = {};
 this.Helpers = {};
 
-reactiveDate = new ReactiveDate(1000)
+reactiveDate = new ReactiveDate(10*1000)
 
 Meteor.startup(function() {
 

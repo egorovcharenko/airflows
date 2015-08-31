@@ -110,15 +110,23 @@
                           .col.s2
                             a#add-decision.waves-effect.waves-light.btn.add-decision
                               i.medium.mdi-content-add
-                      // тайминг
+                      // Доп параметры
                       if task.editMode
                         ul.collapsible(data-collapsible="expandable")
+                          // тайминг
                           li
                             .collapsible-header Тайминг
                             .collapsible-body.padded
                               .input-field
                                 input.validate(id="set-time-field" type="text" value="#{task.timing}")
                                 label.active(for="set-time-field") Сколько минут отводится на задачу (0 или пусто - значит не используется)
+                          // задержка перед этой задачей
+                          li
+                            .collapsible-header.trimmed Задержка перед этой задачей
+                            .collapsible-body.padded
+                              .input-field
+                                input.validate(id="set-delay-field" type="text" value="#{task.delay}")
+                                label.active(for="set-delay-field") Задержка в минутах перед этой задачей
                       if task.editMode
                         .row
                           .col.s12.center-align

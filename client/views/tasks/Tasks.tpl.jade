@@ -7,6 +7,12 @@
       .col.s12.center-align
         p Все задачи выполнены, так держать!
     else
-      each this
+      each this.currentFlows
         .col.s12.m6.l4
           +singleFlowIns
+  .row
+    h4.center-align Задачи в будущем
+  .row
+    each this.futureFlows
+      .col.s12.m6.l4
+        +singleFlowIns

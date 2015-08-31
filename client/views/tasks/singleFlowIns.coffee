@@ -1,14 +1,16 @@
+pluralize2_arr = (number, forms) ->
+  number = Math.abs(number)
+  number %= 100
+  if (number >= 5 && number <= 20)
+    return forms[2]
+  number %= 10
+  if (number == 1)
+    return forms[0]
+  if (number >= 2 && number <= 4)
+    return forms[1]
+  return forms[2]
 
 Template.singleFlowIns.helpers
-	subTasks: ->
-		if Meteor.user()?
-			userRoles = _.map(Roles.find({'users.id': Meteor.userId()}).fetch(), (role) -> role.id)
-			#console.log "userRoles:",userRoles
-			TasksIns.find({flowInsId: @_id, type: {$nin:["start", "end"]}, state: "current", roleId: {$in: userRoles}})
-		else
-			result = TasksIns.find({type: {$nin:["start", "end"]}, state: "current", roleId: {$in: ["role1", "role2"]}})
-			#console.log "flowInsId:",@_id, ", result:", result.fetch()
-			return result
 	isTaskCompleted: ->
 		this.state in ["completed"]
 	taskTypeIsTask: ->
@@ -53,11 +55,33 @@ Template.singleFlowIns.helpers
 		else
 			false
 	logDataContext: ->
-		console.log "logDataContext:", this
+		#console.log "logDataContext:", this
 	dataFields: ->
 		entIns = EntitiesIns.findOne({parentFlowId: @_id})
 		#console.log "entIns:", entIns, ", this:", this
 		return entIns.fields
+	hasTiming: ->
+		this.timing?
+	timeLeftObject: ->
+		result = {}
+		startTime = this.startTime
+		now = reactiveDate.now()
+		if startTime?
+			minutesElapsed = Math.floor((now - startTime) / (1000*60))
+			if this.timing?
+				if not isNaN(this.timing)
+					minutesLeft = this.timing - minutesElapsed
+		if minutesLeft?
+			if minutesLeft >= 0
+				result.string = "Осталось #{minutesLeft} #{pluralize2_arr minutesLeft, ["минута","минуты", "минут"]}"
+				result.overdue = false
+			else
+				result.string = "Просрочено на #{-minutesLeft} #{pluralize2_arr minutesLeft, ["минута","минуты", "минут"]}"
+				result.overdue = true
+		else
+			result.string =  ""
+			result.overdue = false
+		return result
 
 Template.singleFlowIns.events
 	"click #task-completed": (event, template) ->

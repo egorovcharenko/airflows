@@ -58,6 +58,7 @@ mquandalle:jade@0.4.3
 mquandalle:jade-compiler@0.4.3
 mrt:later@1.6.1
 mrt:moment@2.8.1
+multiply:iron-router-progress@1.0.1
 npm-bcrypt@0.7.8_2
 observe-sequence@1.0.6
 ordered-dict@1.0.3

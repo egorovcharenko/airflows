@@ -12,8 +12,12 @@ Meteor.methods
       nextTask = TasksIns.findOne({flowInsId: dataObject.flowInsId, pos: nextPos})
       if not nextTask?
         throw new Meteor.Error(500, "Не найдена следующая задача")
+      # вычислить время запуска
+      if nextTask.delay?
+        delayedUntil = new Date()
+        delayedUntil.setTime(delayedUntil.getTime() + (nextTask.delay * 60 * 1000))
       # изменить ей статус и указатель на предыдущую задачу, а также обновить время запуска
-      TasksIns.update({_id: nextTask._id}, {$set: {state: "current", prevPos: dataObject.pos, startTime: new Date()}}, {tx: true})
+      TasksIns.update({_id: nextTask._id}, {$set: {state: "current", prevPos: dataObject.pos, startTime: new Date(), delayedUntil: delayedUntil}}, {tx: true})
       # изменить статус и проставить поля сущности, если она есть
       entIns = EntitiesIns.findOne({parentFlowId: flowIns._id})
       if entIns?

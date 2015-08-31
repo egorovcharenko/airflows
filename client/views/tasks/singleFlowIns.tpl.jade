@@ -6,10 +6,12 @@ if hasCurrentTasks
         p #{name}
       each dataFields
         +singleFlowInsDataField
-      each subTasks
+      each tasksIns
         if showTask
           div(class="card {{#if isPreend}}teal{{else}}{{#if isTaskNotCurrent}}{{#if isTaskCompleted}}teal{{else}}teal{{/if}}{{else}}teal{{/if}}{{/if}}")
             .card-content
+              if hasTiming
+                h6(class="center-align {{#if timeLeftObject.overdue}}task-timing-text-overdue{{else}}task-timing-text-not-overdue{{/if}}") #{timeLeftObject.string}
               h5.panel-title.white-text #{name}
               .list-group
                 p.list-group-item-text.white-text.text-darken-2 #{instructions}
